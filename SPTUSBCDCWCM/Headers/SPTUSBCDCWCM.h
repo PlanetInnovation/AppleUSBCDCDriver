@@ -23,7 +23,7 @@
 #ifndef __APPLEUSBCDCWCM__
 #define __APPLEUSBCDCWCM__
 
-#include "AppleUSBCDCCommon.h"
+#include "SPTUSBCDCCommon.h"
 
     // Common Defintions
 
@@ -72,12 +72,12 @@ enum
     kNumCDCStates	= 2
 };
 
-	/* AppleUSBCDCWCM.h - This file contains the class definition for the		*/
+	/* SPTUSBCDCWCM.h - This file contains the class definition for the		*/
 	/* USB Communication Device Class (CDC) WMC driver. 				*/
 
-class AppleUSBCDCWCM : public IOService
+class SPTUSBCDCWCM : public IOService
 {
-    OSDeclareDefaultStructors(AppleUSBCDCWCM);			// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(SPTUSBCDCWCM);			// Constructor & Destructor stuff
 
 private:
     bool			fTerminate;				// Are we being terminated (ie the device was unplugged)
@@ -114,5 +114,5 @@ public:
     unsigned long		initialPowerStateForDomainState(IOPMPowerFlags flags);
     IOReturn			setPowerState(unsigned long powerStateOrdinal, IOService *whatDevice);
 
-}; /* end class AppleUSBCDCWCM */
+}; /* end class SPTUSBCDCWCM */
 #endif

@@ -5,17 +5,17 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>AppleUSBCDCACMData</string>
+	<string>SPTUSBCDCACMData</string>
 	<key>CFBundleGetInfoString</key>
 	<string>4.2.1b5, USB CDC ACM driver Data Interface</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.driver.AppleUSBCDCACMData</string>
+	<string>com.spt.driver.SPTUSBCDCACMData</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>AppleUSBCDCACMData</string>
+	<string>SPTUSBCDCACMData</string>
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
 	<key>CFBundleShortVersionString</key>
@@ -26,64 +26,64 @@
 	<string>4.2.1b5</string>
 	<key>IOKitPersonalities</key>
 	<dict>
-		<key>AppleUSBCDCACMData</key>
+ 		<key>SPTUSBCDCACMData</key>
 		<dict>
 			<key>bInterfaceClass</key>
 			<integer>10</integer>
 			<key>bInterfaceSubClass</key>
 			<integer>0</integer>
 			<key>CFBundleIdentifier</key>
-			<string>com.apple.driver.AppleUSBCDCACMData</string>
+			<string>com.spt.driver.SPTUSBCDCACMData</string>
 			<key>InputBuffers</key>
 			<integer>8</integer>
 			<key>IOClass</key>
-			<string>AppleUSBCDCACMData</string>
+			<string>SPTUSBCDCACMData</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBInterface</string>
 			<key>IOUserClientClass</key>
-			<string>AppleUSBCDCACMDataUserClient</string>
+			<string>SPTUSBCDCACMDataUserClient</string>
 			<key>OutputBuffers</key>
 			<integer>16</integer>
 		</dict>
-		<key>AppleUSBCDCACMData1</key>
+		<key>SPTUSBCDCACMData1</key>
 		<dict>
 			<key>bInterfaceClass</key>
 			<integer>10</integer>
 			<key>bInterfaceSubClass</key>
 			<integer>2</integer>
 			<key>CFBundleIdentifier</key>
-			<string>com.apple.driver.AppleUSBCDCACMData</string>
+			<string>com.spt.driver.SPTUSBCDCACMData</string>
 			<key>InputBuffers</key>
 			<integer>8</integer>
 			<key>IOClass</key>
-			<string>AppleUSBCDCACMData</string>
+			<string>SPTUSBCDCACMData</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBInterface</string>
 			<key>IOUserClientClass</key>
-			<string>AppleUSBCDCACMDataUserClient</string>
+			<string>SPTUSBCDCACMDataUserClient</string>
 			<key>OutputBuffers</key>
 			<integer>16</integer>
 		</dict>
-		<key>AppleUSBCDCACMData2</key>
+		<key>SPTUSBCDCACMData2</key>
 		<dict>
 			<key>bInterfaceClass</key>
 			<integer>10</integer>
 			<key>bInterfaceSubClass</key>
 			<integer>255</integer>
 			<key>CFBundleIdentifier</key>
-			<string>com.apple.driver.AppleUSBCDCACMData</string>
+			<string>com.spt.driver.SPTUSBCDCACMData</string>
 			<key>InputBuffers</key>
 			<integer>8</integer>
 			<key>IOClass</key>
-			<string>AppleUSBCDCACMData</string>
+			<string>SPTUSBCDCACMData</string>
 			<key>IOProviderClass</key>
 			<string>IOUSBInterface</string>
 			<key>IOUserClientClass</key>
-			<string>AppleUSBCDCACMDataUserClient</string>
+			<string>SPTUSBCDCACMDataUserClient</string>
 			<key>OutputBuffers</key>
 			<integer>16</integer>
 		</dict>
-		<key>Motorola2822</key>
+		<!--<key>Motorola2822</key>
 		<dict>
 			<key>bConfigurationValue</key>
 			<integer>1</integer>
@@ -290,19 +290,19 @@
 				<key>ResetOnClose</key>
 				<true/>
 			</dict>
-		</dict>
-		<key>White Zoom</key>
+		</dict> -->
+		<key>SPT</key>
 		<dict>
-			<key>bConfigurationValue</key>
+			<!-- <key>bConfigurationValue</key>
 			<integer>2</integer>
 			<key>bInterfaceNumber</key>
-			<integer>1</integer>
+			<integer>1</integer> -->
 			<key>CFBundleIdentifier</key>
 			<string>com.apple.driver.AppleUSBMergeNub</string>
 			<key>idProduct</key>
-			<integer>38656</integer>
+			<integer>13097</integer>
 			<key>idVendor</key>
-			<integer>2051</integer>
+			<integer>3725</integer>
 			<key>IOClass</key>
 			<string>AppleUSBMergeNub</string>
 			<key>IOProviderClass</key>

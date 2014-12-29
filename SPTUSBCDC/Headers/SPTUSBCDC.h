@@ -22,12 +22,12 @@
  * @APPLE_LICENSE_HEADER_END@
  */		
 	
-	/*AppleUSBCDC.h - This file contains the class definition for the	*/
+	/*SPTUSBCDC.h - This file contains the class definition for the	*/
 	/* USB Communication Device Class (CDC) driver			 	*/
 
-class AppleUSBCDC : public IOService
+class SPTUSBCDC : public IOService
 {
-    OSDeclareDefaultStructors(AppleUSBCDC);			// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(SPTUSBCDC);			// Constructor & Destructor stuff
 
 private:
     bool			fTerminate;				// Are we being terminated (ie the device was unplugged)

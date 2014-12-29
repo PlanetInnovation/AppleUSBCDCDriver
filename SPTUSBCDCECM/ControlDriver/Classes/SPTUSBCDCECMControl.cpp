@@ -22,7 +22,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-    /* AppleUSBCDCECMControl.cpp - MacOSX implementation of			*/
+    /* SPTUSBCDCECMControl.cpp - MacOSX implementation of			*/
     /* USB Communication Device Class (CDC) Driver, Ethernet Control Interface.	*/
     
 #include <machine/limits.h>			/* UINT_MAX */
@@ -59,11 +59,11 @@ extern "C"
     #include <sys/mbuf.h>
 }
      
-#define DEBUG_NAME "AppleUSBCDCECMControl"
+#define DEBUG_NAME "SPTUSBCDCECMControl"
 
-#include "AppleUSBCDCECM.h"
-#include "AppleUSBCDCECMControl.h"
-#include "AppleUSBCDCECMData.h"
+#include "SPTUSBCDCECM.h"
+#include "SPTUSBCDCECMControl.h"
+#include "SPTUSBCDCECMData.h"
 
 #if 0
 static IOPMPowerState gOurPowerStates[kNumCDCStates] =
@@ -91,7 +91,7 @@ UInt16	stats[numStats] = { kXMIT_OK_REQ,
 
 #define super IOService
 
-OSDefineMetaClassAndStructors(AppleUSBCDCECMControl, IOService);
+OSDefineMetaClassAndStructors(SPTUSBCDCECMControl, IOService);
 
 /****************************************************************************************************/
 //
@@ -105,10 +105,10 @@ OSDefineMetaClassAndStructors(AppleUSBCDCECMControl, IOService);
 //
 /****************************************************************************************************/
 
-AppleUSBCDC *findCDCDriverEC(void *controlAddr, IOReturn *retCode)
+SPTUSBCDC *findCDCDriverEC(void *controlAddr, IOReturn *retCode)
 {
-    AppleUSBCDCECMControl	*me = (AppleUSBCDCECMControl *)controlAddr;
-    AppleUSBCDC		*CDCDriver = NULL;
+    SPTUSBCDCECMControl	*me = (SPTUSBCDCECMControl *)controlAddr;
+    SPTUSBCDC		*CDCDriver = NULL;
     bool		driverOK = false;
     OSIterator		*iterator = NULL;
     OSDictionary	*matchingDictionary = NULL;
@@ -117,7 +117,7 @@ AppleUSBCDC *findCDCDriverEC(void *controlAddr, IOReturn *retCode)
         
         // Get matching dictionary
        	
-    matchingDictionary = IOService::serviceMatching("AppleUSBCDC");
+    matchingDictionary = IOService::serviceMatching("SPTUSBCDC");
     if (!matchingDictionary)
     {
         XTRACE(me, 0, 0, "findCDCDriverEC - Couldn't create a matching dictionary");
@@ -130,7 +130,7 @@ AppleUSBCDC *findCDCDriverEC(void *controlAddr, IOReturn *retCode)
     iterator = IOService::getMatchingServices(matchingDictionary);
     if (!iterator)
     {
-        XTRACE(me, 0, 0, "findCDCDriverEC - No AppleUSBCDC driver found!");
+        XTRACE(me, 0, 0, "findCDCDriverEC - No SPTUSBCDC driver found!");
         matchingDictionary->release();
 		*retCode = kIOReturnError;
         return NULL;
@@ -138,7 +138,7 @@ AppleUSBCDC *findCDCDriverEC(void *controlAddr, IOReturn *retCode)
 
     	// Iterate until we find our matching CDC driver
                 
-    CDCDriver = (AppleUSBCDC *)iterator->getNextObject();
+    CDCDriver = (SPTUSBCDC *)iterator->getNextObject();
     while (CDCDriver)
     {
         XTRACEP(me, 0, CDCDriver, "findCDCDriverEC - CDC driver candidate");
@@ -149,7 +149,7 @@ AppleUSBCDC *findCDCDriverEC(void *controlAddr, IOReturn *retCode)
             driverOK = CDCDriver->confirmControl(kUSBEthernetControlModel, me->fControlInterface);
             break;
         }
-        CDCDriver = (AppleUSBCDC *)iterator->getNextObject();
+        CDCDriver = (SPTUSBCDC *)iterator->getNextObject();
     }
 
     matchingDictionary->release();
@@ -177,7 +177,7 @@ AppleUSBCDC *findCDCDriverEC(void *controlAddr, IOReturn *retCode)
 
 /****************************************************************************************************/
 //
-//		Function:	AppleUSBCDCECMControl::Asciihex_to_binary
+//		Function:	SPTUSBCDCECMControl::Asciihex_to_binary
 //
 //		Inputs:		c - Ascii character
 //
@@ -187,7 +187,7 @@ AppleUSBCDC *findCDCDriverEC(void *controlAddr, IOReturn *retCode)
 //
 /****************************************************************************************************/
 
-UInt8 AppleUSBCDCECMControl::Asciihex_to_binary(char c)
+UInt8 SPTUSBCDCECMControl::Asciihex_to_binary(char c)
 {
 
     if ('0' <= c && c <= '9')
@@ -207,7 +207,7 @@ UInt8 AppleUSBCDCECMControl::Asciihex_to_binary(char c)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::commReadComplete
+//		Method:		SPTUSBCDCECMControl::commReadComplete
 //
 //		Inputs:		obj - me
 //				param - unused
@@ -220,9 +220,9 @@ UInt8 AppleUSBCDCECMControl::Asciihex_to_binary(char c)
 //
 /****************************************************************************************************/
 //This method rolled back to the one from 4.1.17 due to radar://11946906
-void AppleUSBCDCECMControl::commReadComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void SPTUSBCDCECMControl::commReadComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
-    AppleUSBCDCECMControl	*me = (AppleUSBCDCECMControl*)obj;
+    SPTUSBCDCECMControl	*me = (SPTUSBCDCECMControl*)obj;
     IOReturn			ior;
     UInt32			dLen;
     UInt8			notif;
@@ -296,7 +296,7 @@ void AppleUSBCDCECMControl::commReadComplete(void *obj, void *param, IOReturn rc
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::merWriteComplete
+//		Method:		SPTUSBCDCECMControl::merWriteComplete
 //
 //		Inputs:		obj - me
 //				param - MER (may or may not be present depending on request) 
@@ -309,10 +309,10 @@ void AppleUSBCDCECMControl::commReadComplete(void *obj, void *param, IOReturn rc
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCECMControl::merWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void SPTUSBCDCECMControl::merWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
 #if LDEBUG
-    AppleUSBCDCECMControl	*me = (AppleUSBCDCECMControl *)obj;
+    SPTUSBCDCECMControl	*me = (SPTUSBCDCECMControl *)obj;
 #endif
     IOUSBDevRequest		*MER = (IOUSBDevRequest*)param;
     UInt16			dataLen;
@@ -349,7 +349,7 @@ void AppleUSBCDCECMControl::merWriteComplete(void *obj, void *param, IOReturn rc
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::statsWriteComplete
+//		Method:		SPTUSBCDCECMControl::statsWriteComplete
 //
 //		Inputs:		obj - me
 //				param - parameter block 
@@ -362,9 +362,9 @@ void AppleUSBCDCECMControl::merWriteComplete(void *obj, void *param, IOReturn rc
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCECMControl::statsWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void SPTUSBCDCECMControl::statsWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
-    AppleUSBCDCECMControl	*me = (AppleUSBCDCECMControl *)obj;
+    SPTUSBCDCECMControl	*me = (SPTUSBCDCECMControl *)obj;
     IOUSBDevRequest		*STREQ = (IOUSBDevRequest*)param;
     UInt16			currStat;
 	
@@ -442,7 +442,7 @@ void AppleUSBCDCECMControl::statsWriteComplete(void *obj, void *param, IOReturn 
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::probe
+//		Method:		SPTUSBCDCECMControl::probe
 //
 //		Inputs:		provider - my provider
 //
@@ -452,7 +452,7 @@ void AppleUSBCDCECMControl::statsWriteComplete(void *obj, void *param, IOReturn 
 //
 /****************************************************************************************************/
 
-IOService* AppleUSBCDCECMControl::probe(IOService *provider, SInt32 *score)
+IOService* SPTUSBCDCECMControl::probe(IOService *provider, SInt32 *score)
 { 
     IOService   *res;
 	
@@ -474,7 +474,7 @@ IOService* AppleUSBCDCECMControl::probe(IOService *provider, SInt32 *score)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::start
+//		Method:		SPTUSBCDCECMControl::start
 //
 //		Inputs:		provider - my provider
 //
@@ -485,7 +485,7 @@ IOService* AppleUSBCDCECMControl::probe(IOService *provider, SInt32 *score)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::start(IOService *provider)
+bool SPTUSBCDCECMControl::start(IOService *provider)
 {
 	IOReturn	rtn;
 	UInt16		devDriverCount = 0;
@@ -583,7 +583,7 @@ bool AppleUSBCDCECMControl::start(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::stop
+//		Method:		SPTUSBCDCECMControl::stop
 //
 //		Inputs:		provider - my provider
 //
@@ -593,7 +593,7 @@ bool AppleUSBCDCECMControl::start(IOService *provider)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCECMControl::stop(IOService *provider)
+void SPTUSBCDCECMControl::stop(IOService *provider)
 {
     
     XTRACE(this, 0, 0, "stop");
@@ -610,7 +610,7 @@ void AppleUSBCDCECMControl::stop(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::configureECM
+//		Method:		SPTUSBCDCECMControl::configureECM
 //
 //		Inputs:		
 //
@@ -620,7 +620,7 @@ void AppleUSBCDCECMControl::stop(IOService *provider)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::configureECM()
+bool SPTUSBCDCECMControl::configureECM()
 {
     
     XTRACE(this, 0, 0, "configureECM");
@@ -641,7 +641,7 @@ bool AppleUSBCDCECMControl::configureECM()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::getFunctionalDescriptors
+//		Method:		SPTUSBCDCECMControl::getFunctionalDescriptors
 //
 //		Inputs:		
 //
@@ -651,7 +651,7 @@ bool AppleUSBCDCECMControl::configureECM()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::getFunctionalDescriptors()
+bool SPTUSBCDCECMControl::getFunctionalDescriptors()
 {
     bool				gotDescriptors = false;
     bool				configok = true;
@@ -799,7 +799,7 @@ bool AppleUSBCDCECMControl::getFunctionalDescriptors()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::dataAcquired
+//		Method:		SPTUSBCDCECMControl::dataAcquired
 //
 //		Inputs:		netStats - Network statistics structure address
 //				etherStats - Ethernet statistics structure address
@@ -810,7 +810,7 @@ bool AppleUSBCDCECMControl::getFunctionalDescriptors()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::dataAcquired(IONetworkStats *netStats, IOEthernetStats *etherStats)
+bool SPTUSBCDCECMControl::dataAcquired(IONetworkStats *netStats, IOEthernetStats *etherStats)
 {
     IOReturn 	rtn = kIOReturnSuccess; 
     
@@ -866,7 +866,7 @@ bool AppleUSBCDCECMControl::dataAcquired(IONetworkStats *netStats, IOEthernetSta
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::dataReleased
+//		Method:		SPTUSBCDCECMControl::dataReleased
 //
 //		Inputs:		None
 //
@@ -876,7 +876,7 @@ bool AppleUSBCDCECMControl::dataAcquired(IONetworkStats *netStats, IOEthernetSta
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCECMControl::dataReleased()
+void SPTUSBCDCECMControl::dataReleased()
 {
     
     XTRACE(this, 0, 0, "dataReleased");
@@ -891,7 +891,7 @@ void AppleUSBCDCECMControl::dataReleased()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::allocateResources
+//		Method:		SPTUSBCDCECMControl::allocateResources
 //
 //		Inputs:		
 //
@@ -901,7 +901,7 @@ void AppleUSBCDCECMControl::dataReleased()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::allocateResources()
+bool SPTUSBCDCECMControl::allocateResources()
 {
     IOUSBFindEndpointRequest	epReq;
 
@@ -947,7 +947,7 @@ bool AppleUSBCDCECMControl::allocateResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::releaseResources
+//		Method:		SPTUSBCDCECMControl::releaseResources
 //
 //		Inputs:		
 //
@@ -957,7 +957,7 @@ bool AppleUSBCDCECMControl::allocateResources()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCECMControl::releaseResources()
+void SPTUSBCDCECMControl::releaseResources()
 {
     XTRACE(this, 0, 0, "releaseResources");
 	
@@ -978,7 +978,7 @@ void AppleUSBCDCECMControl::releaseResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::USBSetMulticastFilter
+//		Method:		SPTUSBCDCECMControl::USBSetMulticastFilter
 //
 //		Inputs:		addrs - the list of addresses
 //				count - How many
@@ -989,7 +989,7 @@ void AppleUSBCDCECMControl::releaseResources()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::USBSetMulticastFilter(IOEthernetAddress *addrs, UInt32 count)
+bool SPTUSBCDCECMControl::USBSetMulticastFilter(IOEthernetAddress *addrs, UInt32 count)
 {
     IOReturn		rc;
     IOUSBDevRequest	*MER;
@@ -1069,7 +1069,7 @@ bool AppleUSBCDCECMControl::USBSetMulticastFilter(IOEthernetAddress *addrs, UInt
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::USBSetPacketFilter
+//		Method:		SPTUSBCDCECMControl::USBSetPacketFilter
 //
 //		Inputs:		
 //
@@ -1079,7 +1079,7 @@ bool AppleUSBCDCECMControl::USBSetMulticastFilter(IOEthernetAddress *addrs, UInt
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::USBSetPacketFilter()
+bool SPTUSBCDCECMControl::USBSetPacketFilter()
 {
     IOReturn		rc;
     IOUSBDevRequest	*MER;
@@ -1137,7 +1137,7 @@ bool AppleUSBCDCECMControl::USBSetPacketFilter()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::checkInterfaceNumber
+//		Method:		SPTUSBCDCECMControl::checkInterfaceNumber
 //
 //		Inputs:		dataDriver - the data driver enquiring
 //
@@ -1148,7 +1148,7 @@ bool AppleUSBCDCECMControl::USBSetPacketFilter()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::checkInterfaceNumber(AppleUSBCDCECMData *dataDriver)
+bool SPTUSBCDCECMControl::checkInterfaceNumber(SPTUSBCDCECMData *dataDriver)
 {
     IOUSBInterface	*dataInterface;
 
@@ -1186,7 +1186,7 @@ bool AppleUSBCDCECMControl::checkInterfaceNumber(AppleUSBCDCECMData *dataDriver)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::checkPipe
+//		Method:		SPTUSBCDCECMControl::checkPipe
 //
 //		Inputs:		thePipe - the pipe
 //				devReq - true(send CLEAR_FEATURE), false(only if status returns stalled)
@@ -1199,7 +1199,7 @@ bool AppleUSBCDCECMControl::checkInterfaceNumber(AppleUSBCDCECMData *dataDriver)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCECMControl::checkPipe(IOUSBPipe *thePipe, bool devReq)
+IOReturn SPTUSBCDCECMControl::checkPipe(IOUSBPipe *thePipe, bool devReq)
 {
     IOReturn 	rtn = kIOReturnSuccess;
     
@@ -1229,7 +1229,7 @@ IOReturn AppleUSBCDCECMControl::checkPipe(IOUSBPipe *thePipe, bool devReq)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::statsProcessing
+//		Method:		SPTUSBCDCECMControl::statsProcessing
 //
 //		Inputs:		
 //
@@ -1239,7 +1239,7 @@ IOReturn AppleUSBCDCECMControl::checkPipe(IOUSBPipe *thePipe, bool devReq)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::statsProcessing()
+bool SPTUSBCDCECMControl::statsProcessing()
 {
     UInt32		*enetStats;
     UInt16		currStat;
@@ -1402,7 +1402,7 @@ bool AppleUSBCDCECMControl::statsProcessing()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::message
+//		Method:		SPTUSBCDCECMControl::message
 //
 //		Inputs:		type - message type
 //				provider - my provider
@@ -1414,7 +1414,7 @@ bool AppleUSBCDCECMControl::statsProcessing()
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCECMControl::message(UInt32 type, IOService *provider, void *argument)
+IOReturn SPTUSBCDCECMControl::message(UInt32 type, IOService *provider, void *argument)
 {
     IOReturn	ior;
 	
@@ -1474,7 +1474,7 @@ IOReturn AppleUSBCDCECMControl::message(UInt32 type, IOService *provider, void *
 #if 0
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::initForPM
+//		Method:		SPTUSBCDCECMControl::initForPM
 //
 //		Inputs:		provider - my provider
 //
@@ -1485,7 +1485,7 @@ IOReturn AppleUSBCDCECMControl::message(UInt32 type, IOService *provider, void *
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCECMControl::initForPM(IOService *provider)
+bool SPTUSBCDCECMControl::initForPM(IOService *provider)
 {
     XTRACE(this, 0, 0, "initForPM");
     
@@ -1509,7 +1509,7 @@ bool AppleUSBCDCECMControl::initForPM(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::initialPowerStateForDomainState
+//		Method:		SPTUSBCDCECMControl::initialPowerStateForDomainState
 //
 //		Inputs:		flags - 
 //
@@ -1519,7 +1519,7 @@ bool AppleUSBCDCECMControl::initForPM(IOService *provider)
 //
 /****************************************************************************************************/
 
-unsigned long AppleUSBCDCECMControl::initialPowerStateForDomainState(IOPMPowerFlags flags)
+unsigned long SPTUSBCDCECMControl::initialPowerStateForDomainState(IOPMPowerFlags flags)
 {
 
     XTRACE(this, 0, flags, "initialPowerStateForDomainState");
@@ -1530,7 +1530,7 @@ unsigned long AppleUSBCDCECMControl::initialPowerStateForDomainState(IOPMPowerFl
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCECMControl::setPowerState
+//		Method:		SPTUSBCDCECMControl::setPowerState
 //
 //		Inputs:		powerStateOrdinal - on/off
 //
@@ -1540,7 +1540,7 @@ unsigned long AppleUSBCDCECMControl::initialPowerStateForDomainState(IOPMPowerFl
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCECMControl::setPowerState(unsigned long powerStateOrdinal, IOService *whatDevice)
+IOReturn SPTUSBCDCECMControl::setPowerState(unsigned long powerStateOrdinal, IOService *whatDevice)
 {
 
     XTRACE(this, 0, powerStateOrdinal, "setPowerState");

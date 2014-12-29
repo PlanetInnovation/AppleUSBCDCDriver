@@ -20,7 +20,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-    /* AppleUSBCDCWCM.cpp - MacOSX implementation of			*/
+    /* SPTUSBCDCWCM.cpp - MacOSX implementation of			*/
     /* USB Communication Device Class (CDC) Driver, WMC Interface.	*/
 
 #include <machine/limits.h>			/* UINT_MAX */
@@ -52,9 +52,9 @@
 
 #include <UserNotification/KUNCUserNotifications.h>
 
-#define DEBUG_NAME "AppleUSBCDCWCM"
+#define DEBUG_NAME "SPTUSBCDCWCM"
 
-#include "AppleUSBCDCWCM.h"
+#include "SPTUSBCDCWCM.h"
 
     // Globals
 
@@ -66,11 +66,11 @@ static IOPMPowerState gOurPowerStates[kNumCDCStates] =
 
 #define super IOService
 
-OSDefineMetaClassAndStructors(AppleUSBCDCWCM, IOService);
+OSDefineMetaClassAndStructors(SPTUSBCDCWCM, IOService);
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::probe
+//		Method:		SPTUSBCDCWCM::probe
 //
 //		Inputs:		provider - my provider
 //
@@ -80,7 +80,7 @@ OSDefineMetaClassAndStructors(AppleUSBCDCWCM, IOService);
 //
 /****************************************************************************************************/
 
-IOService* AppleUSBCDCWCM::probe( IOService *provider, SInt32 *score )
+IOService* SPTUSBCDCWCM::probe( IOService *provider, SInt32 *score )
 { 
     IOService   *res;
 	
@@ -102,7 +102,7 @@ IOService* AppleUSBCDCWCM::probe( IOService *provider, SInt32 *score )
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::start
+//		Method:		SPTUSBCDCWCM::start
 //
 //		Inputs:		provider - my provider
 //
@@ -113,7 +113,7 @@ IOService* AppleUSBCDCWCM::probe( IOService *provider, SInt32 *score )
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCWCM::start(IOService *provider)
+bool SPTUSBCDCWCM::start(IOService *provider)
 {
 
     fTerminate = false;
@@ -169,7 +169,7 @@ bool AppleUSBCDCWCM::start(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::stop
+//		Method:		SPTUSBCDCWCM::stop
 //
 //		Inputs:		provider - my provider
 //
@@ -179,7 +179,7 @@ bool AppleUSBCDCWCM::start(IOService *provider)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCWCM::stop(IOService *provider)
+void SPTUSBCDCWCM::stop(IOService *provider)
 {
 
     XTRACE(this, 0, 0, "stop");
@@ -203,7 +203,7 @@ void AppleUSBCDCWCM::stop(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::configureWHCM
+//		Method:		SPTUSBCDCWCM::configureWHCM
 //
 //		Inputs:		None
 //
@@ -213,7 +213,7 @@ void AppleUSBCDCWCM::stop(IOService *provider)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCWCM::configureWHCM()
+bool SPTUSBCDCWCM::configureWHCM()
 {
 
     XTRACE(this, 0, 0, "configureWHCM");
@@ -233,7 +233,7 @@ bool AppleUSBCDCWCM::configureWHCM()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::configureDevice
+//		Method:		SPTUSBCDCWCM::configureDevice
 //
 //		Inputs:		None
 //
@@ -243,7 +243,7 @@ bool AppleUSBCDCWCM::configureWHCM()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCWCM::configureDevice()
+bool SPTUSBCDCWCM::configureDevice()
 {
     bool	configOK = false;
 
@@ -278,7 +278,7 @@ bool AppleUSBCDCWCM::configureDevice()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::getFunctionalDescriptors
+//		Method:		SPTUSBCDCWCM::getFunctionalDescriptors
 //
 //		Inputs:		
 //
@@ -288,7 +288,7 @@ bool AppleUSBCDCWCM::configureDevice()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCWCM::getFunctionalDescriptors()
+bool SPTUSBCDCWCM::getFunctionalDescriptors()
 {
     bool				gotDescriptors = false;
     UInt16				vers;
@@ -363,7 +363,7 @@ bool AppleUSBCDCWCM::getFunctionalDescriptors()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::allocateResources
+//		Method:		SPTUSBCDCWCM::allocateResources
 //
 //		Inputs:		
 //
@@ -373,7 +373,7 @@ bool AppleUSBCDCWCM::getFunctionalDescriptors()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCWCM::allocateResources()
+bool SPTUSBCDCWCM::allocateResources()
 {
 
     XTRACE(this, 0, 0, "allocateResources.");
@@ -392,7 +392,7 @@ bool AppleUSBCDCWCM::allocateResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::releaseResources
+//		Method:		SPTUSBCDCWCM::releaseResources
 //
 //		Inputs:		
 //
@@ -402,7 +402,7 @@ bool AppleUSBCDCWCM::allocateResources()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCWCM::releaseResources()
+void SPTUSBCDCWCM::releaseResources()
 {
     XTRACE(this, 0, 0, "releaseResources");
 	
@@ -417,7 +417,7 @@ void AppleUSBCDCWCM::releaseResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::resetLogicalHandset
+//		Method:		SPTUSBCDCWCM::resetLogicalHandset
 //
 //		Inputs:		
 //
@@ -427,7 +427,7 @@ void AppleUSBCDCWCM::releaseResources()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCWCM::resetLogicalHandset(void)
+void SPTUSBCDCWCM::resetLogicalHandset(void)
 {
 
     XTRACE(this, 0, 0, "resetLogicalHandset");
@@ -443,7 +443,7 @@ void AppleUSBCDCWCM::resetLogicalHandset(void)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::message
+//		Method:		SPTUSBCDCWCM::message
 //
 //		Inputs:		type - message type
 //				provider - my provider
@@ -455,7 +455,7 @@ void AppleUSBCDCWCM::resetLogicalHandset(void)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCWCM::message(UInt32 type, IOService *provider, void *argument)
+IOReturn SPTUSBCDCWCM::message(UInt32 type, IOService *provider, void *argument)
 {	
     
     XTRACE(this, 0, type, "message");
@@ -499,7 +499,7 @@ IOReturn AppleUSBCDCWCM::message(UInt32 type, IOService *provider, void *argumen
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::initForPM
+//		Method:		SPTUSBCDCWCM::initForPM
 //
 //		Inputs:		provider - my provider
 //
@@ -510,7 +510,7 @@ IOReturn AppleUSBCDCWCM::message(UInt32 type, IOService *provider, void *argumen
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCWCM::initForPM(IOService *provider)
+bool SPTUSBCDCWCM::initForPM(IOService *provider)
 {
     XTRACE(this, 0, 0, "initForPM");
     
@@ -534,7 +534,7 @@ bool AppleUSBCDCWCM::initForPM(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::initialPowerStateForDomainState
+//		Method:		SPTUSBCDCWCM::initialPowerStateForDomainState
 //
 //		Inputs:		flags - 
 //
@@ -544,7 +544,7 @@ bool AppleUSBCDCWCM::initForPM(IOService *provider)
 //
 /****************************************************************************************************/
 
-unsigned long AppleUSBCDCWCM::initialPowerStateForDomainState(IOPMPowerFlags flags)
+unsigned long SPTUSBCDCWCM::initialPowerStateForDomainState(IOPMPowerFlags flags)
 {
 
     XTRACE(this, 0, flags, "initialPowerStateForDomainState");
@@ -555,7 +555,7 @@ unsigned long AppleUSBCDCWCM::initialPowerStateForDomainState(IOPMPowerFlags fla
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCWCM::setPowerState
+//		Method:		SPTUSBCDCWCM::setPowerState
 //
 //		Inputs:		powerStateOrdinal - on/off
 //
@@ -565,7 +565,7 @@ unsigned long AppleUSBCDCWCM::initialPowerStateForDomainState(IOPMPowerFlags fla
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCWCM::setPowerState(unsigned long powerStateOrdinal, IOService *whatDevice)
+IOReturn SPTUSBCDCWCM::setPowerState(unsigned long powerStateOrdinal, IOService *whatDevice)
 {
 
     XTRACE(this, 0, powerStateOrdinal, "setPowerState");

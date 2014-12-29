@@ -25,7 +25,7 @@
 #ifndef __APPLEUSBCDCECM__
 #define __APPLEUSBCDCECM__
 
-#include "AppleUSBCDCCommon.h"        
+#include "SPTUSBCDCCommon.h"        
 
 #define LDEBUG		0			// for debugging
 #define USE_ELG		0			// to Event LoG (via kprintf and Firewire) - LDEBUG must also be set

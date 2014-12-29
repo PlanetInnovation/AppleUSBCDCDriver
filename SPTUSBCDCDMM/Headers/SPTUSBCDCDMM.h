@@ -25,8 +25,8 @@
 #ifndef __APPLEUSBCDCDMM__
 #define __APPLEUSBCDCDMM__
 
-#include "AppleUSBCDCCommon.h"
-#include "AppleUSBCDC.h"
+#include "SPTUSBCDCCommon.h"
+#include "SPTUSBCDC.h"
 
     // Common Defintions
 
@@ -243,12 +243,12 @@ typedef struct
 
 } PortInfo_t;
 
-	/* AppleUSBCDCDMM.h - This file contains the class definition for the		*/
+	/* SPTUSBCDCDMM.h - This file contains the class definition for the		*/
 	/* USB Communication Device Class (CDC) DMM Interface driver.			*/
 
-class AppleUSBCDCDMM : public IOSerialDriverSync
+class SPTUSBCDCDMM : public IOSerialDriverSync
 {
-    OSDeclareDefaultStructors(AppleUSBCDCDMM);			// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(SPTUSBCDCDMM);			// Constructor & Destructor stuff
 
 private:
     UInt16				fSessions;				// Number of active sessions
@@ -368,5 +368,5 @@ private:
 	UInt16			isCRinQueue(CirQueue *Queue);
     void 			CheckQueues(void);
     
-}; /* end class AppleUSBCDCDMM */
+}; /* end class SPTUSBCDCDMM */
 #endif

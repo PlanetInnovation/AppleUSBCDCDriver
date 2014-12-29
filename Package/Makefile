@@ -7,9 +7,9 @@ cwd  := $(shell pwd)
 #PM := "${PPATH}/Contents/MacOS/PackageMaker"
 
 # grab the long version number out of my prefix file
-version  := $(word 3, $(shell grep VersionNumber ../Common/AppleUSBCDCCommon.h))
+version  := $(word 3, $(shell grep VersionNumber ../Common/SPTUSBCDCCommon.h))
 
-NAME := AppleUSBCDCDriver-${version}
+NAME := SPTUSBCDCDriver-${version}
 PKG  := ../build/${NAME}.pkg
 TMP  := /tmp/cdc.root/
 #DMG  := ../build/${NAME}.dmg
@@ -22,7 +22,7 @@ clean:
 	sudo rm -rf ${TMP}
 
 #${PKG}:
-#	${PM} --doc AppleUSBCDCDriver.pmdoc --out "${PKG}"
+#	${PM} --doc SPTUSBCDCDriver.pmdoc --out "${PKG}"
 
 #${DMG}:	${PKG}
 #	rm -f ${DMG}
@@ -30,6 +30,6 @@ clean:
 
 ${PKG}:
 	(cd .. ; sudo xcodebuild ARCHS="${ARCHS}" install DSTROOT="${TMP}" )
-	sudo pkgbuild --root=${TMP} --identifier com.apple.iokit.AppleUSBCDCDriver --version ${version} ${PKG}
+	sudo pkgbuild --root=${TMP} --identifier com.apple.iokit.SPTUSBCDCDriver --version ${version} ${PKG}
 	(cd ${TMP} ; sudo tar cvzf ${TARBALL} .)
 	ls -ltr ../build

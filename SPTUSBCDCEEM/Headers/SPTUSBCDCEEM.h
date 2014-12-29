@@ -25,8 +25,8 @@
 #ifndef __APPLEUSBCDCEEM__
 #define __APPLEUSBCDCEEM__
 
-#include "AppleUSBCDCCommon.h"
-#include "AppleUSBCDC.h"  
+#include "SPTUSBCDCCommon.h"
+#include "SPTUSBCDC.h"  
 
 #define LDEBUG		0			// for debugging
 #define USE_ELG		0			// to Event LoG (via kprintf and Firewire) - LDEBUG must also be set
@@ -151,11 +151,11 @@ typedef struct
 #define EEMResponseCompleteHint	0x20
 #define EEMTickle				0x28
 
-class AppleUSBCDC;
+class SPTUSBCDC;
 
-class AppleUSBCDCEEM : public IOEthernetController
+class SPTUSBCDCEEM : public IOEthernetController
 {
-    OSDeclareDefaultStructors(AppleUSBCDCEEM);	// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(SPTUSBCDCEEM);	// Constructor & Destructor stuff
 
 private:
     bool			fTerminate;				// Are we being terminated (ie the device was unplugged)
@@ -247,5 +247,5 @@ public:
     virtual const OSString	*newRevisionString(void) const;
     virtual bool		configureInterface(IONetworkInterface *netif);
 												
-}; /* end class AppleUSBCDCEEM */
+}; /* end class SPTUSBCDCEEM */
 #endif

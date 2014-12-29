@@ -25,8 +25,8 @@
 #ifndef __APPLEUSBCDCACMControl__
 #define __APPLEUSBCDCACMControl__
 
-#include "AppleUSBCDCCommon.h"
-#include "AppleUSBCDCACMData.h"
+#include "SPTUSBCDCCommon.h"
+#include "SPTUSBCDCACMData.h"
 
     // Miscellaneous
 
@@ -41,18 +41,18 @@ enum
     kNumCDCStates	= 2
 };
 
-class AppleUSBCDCACMData;
+class SPTUSBCDCACMData;
 
-	/* AppleUSBCDCACMControl.h - This file contains the class definition for the		*/
+	/* SPTUSBCDCACMControl.h - This file contains the class definition for the		*/
 	/* USB Communication Device Class (CDC) ACM Control driver. 				*/
 
-class AppleUSBCDCACMControl : public IOService
+class SPTUSBCDCACMControl : public IOService
 {
-    OSDeclareDefaultStructors(AppleUSBCDCACMControl);			// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(SPTUSBCDCACMControl);			// Constructor & Destructor stuff
 
 private:
-	AppleUSBCDC				*fCDCDriver;		// The CDC driver
-    AppleUSBCDCACMData		*fDataDriver;       // Our Data Driver
+	SPTUSBCDC				*fCDCDriver;		// The CDC driver
+    SPTUSBCDCACMData		*fDataDriver;       // Our Data Driver
     bool			fdataAcquired;				// Has the data port been acquired
     UInt8			fSessions;				// Active sessions (across all ports)
     bool			fTerminate;				// Are we being terminated (ie the device was unplugged)
@@ -98,7 +98,7 @@ public:
     void			releaseResources(void);
     bool			WakeonRing(void);
     void                        resetDevice(void);
-    virtual bool		checkInterfaceNumber(AppleUSBCDCACMData *dataDriver);
+    virtual bool		checkInterfaceNumber(SPTUSBCDCACMData *dataDriver);
     
         // Power Manager Methods
         
@@ -106,5 +106,5 @@ public:
     unsigned long		initialPowerStateForDomainState(IOPMPowerFlags flags);
     IOReturn			setPowerState(unsigned long powerStateOrdinal, IOService *whatDevice);
     
-}; /* end class AppleUSBCDCACMControl */
+}; /* end class SPTUSBCDCACMControl */
 #endif

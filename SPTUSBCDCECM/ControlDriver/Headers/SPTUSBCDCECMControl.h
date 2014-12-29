@@ -26,8 +26,8 @@
 #ifndef __APPLEUSBCDCECMControl__
 #define __APPLEUSBCDCECMControl__
 
-#include "AppleUSBCDCCommon.h"
-#include "AppleUSBCDCECMData.h"
+#include "SPTUSBCDCCommon.h"
+#include "SPTUSBCDCECMData.h"
 
     // Miscellaneous
 
@@ -42,19 +42,19 @@ enum
     kNumCDCStates	= 2
 };
 
-class AppleUSBCDCECMData;
+class SPTUSBCDCECMData;
 
-        /* AppleUSBCDCECMControl.h - This file contains the class definition for the		*/
+        /* SPTUSBCDCECMControl.h - This file contains the class definition for the		*/
 	/* USB Communication Device Class (CDC) Ethernet Control driver. 			*/
 
 
-class AppleUSBCDCECMControl : public IOService
+class SPTUSBCDCECMControl : public IOService
 {
-    OSDeclareDefaultStructors(AppleUSBCDCECMControl);	// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(SPTUSBCDCECMControl);	// Constructor & Destructor stuff
 
 private:
-	AppleUSBCDC				*fCDCDriver;		// The CDC driver
-	AppleUSBCDCECMData		*fDataDriver;		// Our data interface driver
+	SPTUSBCDC				*fCDCDriver;		// The CDC driver
+	SPTUSBCDCECMData		*fDataDriver;		// Our data interface driver
     bool			fdataAcquired;				// Has the data port been acquired
     bool			fTerminate;				// Are we being terminated (ie the device was unplugged)
     UInt8			fPowerState;				// Ordinal for power management
@@ -118,7 +118,7 @@ public:
     virtual void		dataReleased(void);
     bool 			allocateResources(void);
     void			releaseResources(void);
-    virtual bool		checkInterfaceNumber(AppleUSBCDCECMData *dataDriver);
+    virtual bool		checkInterfaceNumber(SPTUSBCDCECMData *dataDriver);
     IOReturn			checkPipe(IOUSBPipe *thePipe, bool devReq);
     virtual bool		USBSetMulticastFilter(IOEthernetAddress *addrs, UInt32 count);
     virtual bool		USBSetPacketFilter(void);
@@ -130,5 +130,5 @@ public:
 //    unsigned long		initialPowerStateForDomainState(IOPMPowerFlags flags);
 //    IOReturn			setPowerState(unsigned long powerStateOrdinal, IOService *whatDevice);
 												
-}; /* end class AppleUSBCDCECMControl */
+}; /* end class SPTUSBCDCECMControl */
 #endif

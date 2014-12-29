@@ -22,7 +22,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-    /* AppleUSBCDC.cpp - MacOSX implementation of		*/
+    /* SPTUSBCDC.cpp - MacOSX implementation of		*/
     /* USB Communication Device Class (CDC) Driver.		*/
 
 #include <TargetConditionals.h>
@@ -56,11 +56,11 @@
 
 #include <UserNotification/KUNCUserNotifications.h>
 
-#define DEBUG_NAME "AppleUSBCDC"
+#define DEBUG_NAME "SPTUSBCDC"
 
-#include "AppleUSBCDCCommon.h"
-#include "AppleUSBCDC.h"
-#include "AppleUSBCDCPrivate.h"
+#include "SPTUSBCDCCommon.h"
+#include "SPTUSBCDC.h"
+#include "SPTUSBCDCPrivate.h"
 #include "WWANSchemaDefinitions.h"
 
 #if LDEBUG
@@ -71,11 +71,11 @@
 
 #define super IOService
 
-OSDefineMetaClassAndStructors(AppleUSBCDC, IOService);
+OSDefineMetaClassAndStructors(SPTUSBCDC, IOService);
 
 /****************************************************************************************************/
 //
-//		Function:	AppleUSBCDC::Asciihex_to_binary
+//		Function:	SPTUSBCDC::Asciihex_to_binary
 //
 //		Inputs:		c - Ascii character
 //
@@ -85,7 +85,7 @@ OSDefineMetaClassAndStructors(AppleUSBCDC, IOService);
 //
 /****************************************************************************************************/
 
-UInt8 AppleUSBCDC::Asciihex_to_binary(char c)
+UInt8 SPTUSBCDC::Asciihex_to_binary(char c)
 {
 
     if ('0' <= c && c <= '9')
@@ -105,7 +105,7 @@ UInt8 AppleUSBCDC::Asciihex_to_binary(char c)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::probe
+//		Method:		SPTUSBCDC::probe
 //
 //		Inputs:		provider - my provider
 //
@@ -115,7 +115,7 @@ UInt8 AppleUSBCDC::Asciihex_to_binary(char c)
 //
 /****************************************************************************************************/
 
-IOService *AppleUSBCDC::probe(IOService *provider, SInt32 *score)
+IOService *SPTUSBCDC::probe(IOService *provider, SInt32 *score)
 {
 	IOUSBDevice *newDevice = NULL;
 	UInt8		classValue = 0;
@@ -182,7 +182,7 @@ IOService *AppleUSBCDC::probe(IOService *provider, SInt32 *score)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::start
+//		Method:		SPTUSBCDC::start
 //
 //		Inputs:		provider - my provider
 //
@@ -193,7 +193,7 @@ IOService *AppleUSBCDC::probe(IOService *provider, SInt32 *score)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::start(IOService *provider)
+bool SPTUSBCDC::start(IOService *provider)
 {
     UInt8		configs;	// number of device configurations
 	UInt8		prefConfigValue = 0;
@@ -317,7 +317,7 @@ bool AppleUSBCDC::start(IOService *provider)
     	
 }/* end start */
 
-void AppleUSBCDC::free()
+void SPTUSBCDC::free()
 {
 	
 	XTRACE(this, 0, 0, "free");
@@ -345,7 +345,7 @@ void AppleUSBCDC::free()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::stop
+//		Method:		SPTUSBCDC::stop
 //
 //		Inputs:		provider - my provider
 //
@@ -355,7 +355,7 @@ void AppleUSBCDC::free()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDC::stop(IOService *provider)
+void SPTUSBCDC::stop(IOService *provider)
 {
     
     XTRACE(this, 0, 0, "stop");
@@ -378,7 +378,7 @@ void AppleUSBCDC::stop(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::getCDCDevice
+//		Method:		SPTUSBCDC::getCDCDevice
 //
 //		Inputs:		
 //
@@ -388,7 +388,7 @@ void AppleUSBCDC::stop(IOService *provider)
 //
 /****************************************************************************************************/
 
-IOUSBDevice *AppleUSBCDC::getCDCDevice()
+IOUSBDevice *SPTUSBCDC::getCDCDevice()
 {
 
     XTRACE(this, 0, 0, "getCDCDevice");
@@ -399,7 +399,7 @@ IOUSBDevice *AppleUSBCDC::getCDCDevice()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::checkDevice
+//		Method:		SPTUSBCDC::checkDevice
 //
 //		Inputs:		theDevice - the device to check
 //
@@ -409,7 +409,7 @@ IOUSBDevice *AppleUSBCDC::getCDCDevice()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::checkDevice(IOUSBDevice *theDevice)
+bool SPTUSBCDC::checkDevice(IOUSBDevice *theDevice)
 {
     IOUSBFindInterfaceRequest	req;
 	UInt8				numConfigs;						// number of device configurations
@@ -483,7 +483,7 @@ bool AppleUSBCDC::checkDevice(IOUSBDevice *theDevice)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::initDevice
+//		Method:		SPTUSBCDC::initDevice
 //
 //		Inputs:		numConfigs - number of configurations present
 //
@@ -493,7 +493,7 @@ bool AppleUSBCDC::checkDevice(IOUSBDevice *theDevice)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::initDevice(UInt8 numConfigs)
+bool SPTUSBCDC::initDevice(UInt8 numConfigs)
 {
     IOUSBFindInterfaceRequest		req;
     const IOUSBConfigurationDescriptor	*cd = NULL;		// configuration descriptor
@@ -694,7 +694,7 @@ bool AppleUSBCDC::initDevice(UInt8 numConfigs)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::reInitDevice
+//		Method:		SPTUSBCDC::reInitDevice
 //
 //		Inputs:		
 //
@@ -704,7 +704,7 @@ bool AppleUSBCDC::initDevice(UInt8 numConfigs)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDC::reInitDevice()
+IOReturn SPTUSBCDC::reInitDevice()
 {
 	IOUSBDevRequest req;
     IOReturn		ior = kIOReturnSuccess;
@@ -729,7 +729,7 @@ IOReturn AppleUSBCDC::reInitDevice()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::checkACM
+//		Method:		SPTUSBCDC::checkACM
 //
 //		Inputs:		Comm - pointer to the interface
 //				cInterfaceNum - the interface number of the current Comm. interface
@@ -741,7 +741,7 @@ IOReturn AppleUSBCDC::reInitDevice()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::checkACM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool SPTUSBCDC::checkACM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
     bool				gotDescriptors = false;
     bool				configOK = true;
@@ -821,7 +821,7 @@ bool AppleUSBCDC::checkACM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::checkECM
+//		Method:		SPTUSBCDC::checkECM
 //
 //		Inputs:		Comm - pointer to the interface
 //				cInterfaceNum - the interface number of the current Comm. interface
@@ -833,7 +833,7 @@ bool AppleUSBCDC::checkACM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::checkECM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool SPTUSBCDC::checkECM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
     bool				gotDescriptors = false;
     bool				configOK = true;
@@ -889,7 +889,7 @@ bool AppleUSBCDC::checkECM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
                         for (i = 0; i < 6; i++)
                         {
                             fCacheEaddr[i] = (Asciihex_to_binary(ascii_mac[i*2]) << 4) | Asciihex_to_binary(ascii_mac[i*2+1]);
-//                            Log("AppleUSBCDC: checkECM - Ethernet address[%d] = %8x\n",(unsigned int)(i),(unsigned int)(fCacheEaddr[i]));
+//                            Log("SPTUSBCDC: checkECM - Ethernet address[%d] = %8x\n",(unsigned int)(i),(unsigned int)(fCacheEaddr[i]));
                         }
                         XTRACE(this, 0, addrString, "checkECM - Ethernet address (cached)");
                     } else {
@@ -915,8 +915,8 @@ bool AppleUSBCDC::checkECM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
                         for (i = 0; i < 6; i++)
                         {
                             fCacheEaddr[i] = (Asciihex_to_binary(ascii_mac[i*2]) << 4) | Asciihex_to_binary(ascii_mac[i*2+1]);
-                            // Log("AppleUSBCDC: checkECM - Ethernet address[%d] = %8x\n",(unsigned int)(i),(unsigned int)(fCacheEaddr[i]));
-                            kprintf("AppleUSBCDC: checkECM - Ethernet address[%d] = %8x\n",(unsigned int)(i),(unsigned int)(fCacheEaddr[i]));
+                            // Log("SPTUSBCDC: checkECM - Ethernet address[%d] = %8x\n",(unsigned int)(i),(unsigned int)(fCacheEaddr[i]));
+                            kprintf("SPTUSBCDC: checkECM - Ethernet address[%d] = %8x\n",(unsigned int)(i),(unsigned int)(fCacheEaddr[i]));
                         }
                         XTRACE(this, 0, addrString, "checkECM - Ethernet address (cached)");
                     } else {
@@ -940,7 +940,7 @@ bool AppleUSBCDC::checkECM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::checkWMC
+//		Method:		SPTUSBCDC::checkWMC
 //
 //		Inputs:		Comm - pointer to the interface
 //				cInterfaceNum - the interface number of the current Comm. interface
@@ -952,7 +952,7 @@ bool AppleUSBCDC::checkECM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::checkWMC(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool SPTUSBCDC::checkWMC(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
        
     XTRACE(this, 0, 0, "checkWMC");
@@ -963,7 +963,7 @@ bool AppleUSBCDC::checkWMC(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::checkDMM
+//		Method:		SPTUSBCDC::checkDMM
 //
 //		Inputs:		Comm - pointer to the interface
 //				cInterfaceNum - the interface number of the current Comm. interface
@@ -975,7 +975,7 @@ bool AppleUSBCDC::checkWMC(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::checkDMM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool SPTUSBCDC::checkDMM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
        
     XTRACE(this, 0, 0, "checkDMM");
@@ -986,7 +986,7 @@ bool AppleUSBCDC::checkDMM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::checkMBIM
+//		Method:		SPTUSBCDC::checkMBIM
 //
 //		Inputs:		Comm - pointer to the interface
 //				cInterfaceNum - the interface number of the current Comm. interface
@@ -998,7 +998,7 @@ bool AppleUSBCDC::checkDMM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 d
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::checkMBIM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool SPTUSBCDC::checkMBIM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
        
     XTRACE(this, 0, 0, "checkMBIM");
@@ -1012,7 +1012,7 @@ bool AppleUSBCDC::checkMBIM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::confirmDriver
+//		Method:		SPTUSBCDC::confirmDriver
 //
 //		Inputs:		subClass - the subclass needed by the inquiring data driver
 //				dataInterface - the data interface of the data driver
@@ -1024,7 +1024,7 @@ bool AppleUSBCDC::checkMBIM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::confirmDriver(UInt8 subClass, UInt8 dataInterface)
+bool SPTUSBCDC::confirmDriver(UInt8 subClass, UInt8 dataInterface)
 {
     IOUSBFindInterfaceRequest	req;
     IOUSBInterface		*Comm;
@@ -1116,7 +1116,7 @@ bool AppleUSBCDC::confirmDriver(UInt8 subClass, UInt8 dataInterface)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::confirmControl
+//		Method:		SPTUSBCDC::confirmControl
 //
 //		Inputs:		subClass - the subclass of the inquiring control driver
 //					CInterface - the control interface
@@ -1127,7 +1127,7 @@ bool AppleUSBCDC::confirmDriver(UInt8 subClass, UInt8 dataInterface)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDC::confirmControl(UInt8 subClass, IOUSBInterface *CInterface)
+bool SPTUSBCDC::confirmControl(UInt8 subClass, IOUSBInterface *CInterface)
 {
     IOUSBFindInterfaceRequest	req;
     IOUSBInterface		*Comm;
@@ -1185,7 +1185,7 @@ bool AppleUSBCDC::confirmControl(UInt8 subClass, IOUSBInterface *CInterface)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDC::message
+//		Method:		SPTUSBCDC::message
 //
 //		Inputs:		type - message type
 //				provider - my provider
@@ -1197,7 +1197,7 @@ bool AppleUSBCDC::confirmControl(UInt8 subClass, IOUSBInterface *CInterface)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDC::message(UInt32 type, IOService *provider, void *argument)
+IOReturn SPTUSBCDC::message(UInt32 type, IOService *provider, void *argument)
 {	
     
     XTRACE(this, 0, type, "message");
@@ -1228,7 +1228,7 @@ IOReturn AppleUSBCDC::message(UInt32 type, IOService *provider, void *argument)
             break;
         case kIOMessageServiceWasClosed: 	
             #if LDEBUG
-            OSReportWithBacktrace("AppleUSBCDC::message called with kIOMessageServiceWasClosed ");
+            OSReportWithBacktrace("SPTUSBCDC::message called with kIOMessageServiceWasClosed ");
             #endif
             XTRACE(provider, 0, type, "message - kIOMessageServiceWasClosed");
             break;
@@ -1247,7 +1247,7 @@ IOReturn AppleUSBCDC::message(UInt32 type, IOService *provider, void *argument)
             break;
         default:
         #if LDEBUG
-            OSReportWithBacktrace("AppleUSBCDC::message called with Unknown type %lx ",type);
+            OSReportWithBacktrace("SPTUSBCDC::message called with Unknown type %lx ",type);
         #endif
             XTRACE(this, 0, type, "message - unknown message"); 
             break;
@@ -1258,13 +1258,13 @@ IOReturn AppleUSBCDC::message(UInt32 type, IOService *provider, void *argument)
 }/* end message */
 
 
-IOCommandGate *AppleUSBCDC::getCommandGate() const
+IOCommandGate *SPTUSBCDC::getCommandGate() const
 {
     return fCommandGate;
 }
 
 
-IOReturn AppleUSBCDC::setProperties( OSObject * properties )
+IOReturn SPTUSBCDC::setProperties( OSObject * properties )
 {
 	IOReturn result = kIOReturnError;
 	IOCommandGate *cg;
@@ -1290,7 +1290,7 @@ IOReturn AppleUSBCDC::setProperties( OSObject * properties )
 //	setPropertiesAction
 //===========================================================================================================================
 
-IOReturn AppleUSBCDC::setPropertiesAction(	OSObject	*owner, 
+IOReturn SPTUSBCDC::setPropertiesAction(	OSObject	*owner, 
 														void		*arg1, 
 														void		*arg2, 
 														void		*arg3, 
@@ -1300,7 +1300,7 @@ IOReturn AppleUSBCDC::setPropertiesAction(	OSObject	*owner,
 	
 	if ( owner != NULL )
 	{
-		AppleUSBCDC *me = OSDynamicCast( AppleUSBCDC, owner );
+		SPTUSBCDC *me = OSDynamicCast( SPTUSBCDC, owner );
 		
 		if ( me != NULL )
 		{
@@ -1315,7 +1315,7 @@ IOReturn AppleUSBCDC::setPropertiesAction(	OSObject	*owner,
 //	setPropertiesWL
 //===========================================================================================================================
 
-IOReturn AppleUSBCDC::setPropertiesWL( OSObject * properties )
+IOReturn SPTUSBCDC::setPropertiesWL( OSObject * properties )
 {
 	IOReturn result = kIOReturnBadArgument;
 	OSDictionary *propertyDict;
@@ -1337,18 +1337,18 @@ IOReturn AppleUSBCDC::setPropertiesWL( OSObject * properties )
 		
 		if ( suspendDevice == kOSBooleanTrue ) 
 		{
-			Log("AppleUSBCDC::setProperties - SuspendDevice: true\n");
+			Log("SPTUSBCDC::setProperties - SuspendDevice: true\n");
 			
 			if ( fpDevice->isOpen(this) )
 			{
 				if ( ( result = fpDevice->SuspendDevice(true) ) != kIOReturnSuccess )
 				{
-					Log("AppleUSBCDC::setProperties - failed to suspend the device, error: %08x \n", result);
+					Log("SPTUSBCDC::setProperties - failed to suspend the device, error: %08x \n", result);
 				}
 			}
 			else
 			{
-				Log("AppleUSBCDC::setProperties - device was not open \n");
+				Log("SPTUSBCDC::setProperties - device was not open \n");
 				return kIOReturnError;
 			}
 			
@@ -1356,18 +1356,18 @@ IOReturn AppleUSBCDC::setPropertiesWL( OSObject * properties )
 		}
 		else if ( suspendDevice == kOSBooleanFalse )
 		{
-			Log("AppleUSBCDC::setProperties - SuspendDevice: false\n");
+			Log("SPTUSBCDC::setProperties - SuspendDevice: false\n");
 			
 			if ( fpDevice->isOpen(this) )
 			{
 				if ( ( result = fpDevice->SuspendDevice(false) ) != kIOReturnSuccess )
 				{
-					Log("AppleUSBCDC::setProperties - failed to !suspend the device, error: %08x \n", result);
+					Log("SPTUSBCDC::setProperties - failed to !suspend the device, error: %08x \n", result);
 				}
 			}
 			else
 			{
-				IOLog("AppleUSBCDC::setProperties - device was not open \n");
+				IOLog("SPTUSBCDC::setProperties - device was not open \n");
 				result = kIOReturnError;
 			}
 			
@@ -1396,9 +1396,9 @@ IOReturn AppleUSBCDC::setPropertiesWL( OSObject * properties )
 			result = fpDevice->DeviceRequest(&devreq);
 			if ( result == kIOReturnSuccess )
 			{
-				IOLog("AppleUSBCDC::setProperties - Set/Clear remote wake up feature successful\n");
+				IOLog("SPTUSBCDC::setProperties - Set/Clear remote wake up feature successful\n");
 			} else {
-				IOLog("AppleUSBCDC::setProperties - Set/Clear remote wake up feature failed, %08x\n", result);
+				IOLog("SPTUSBCDC::setProperties - Set/Clear remote wake up feature failed, %08x\n", result);
 		}
 
 			return result;			

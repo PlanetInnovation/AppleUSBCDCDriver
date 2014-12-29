@@ -56,9 +56,9 @@ extern "C"
     #include <sys/mbuf.h>
 }
 
-#define DEBUG_NAME "AppleUSBCDCEEM"
+#define DEBUG_NAME "SPTUSBCDCEEM"
  
-#include "AppleUSBCDCEEM.h"
+#include "SPTUSBCDCEEM.h"
 
 #define MIN_BAUD (50 << 1)
     
@@ -80,7 +80,7 @@ mediumTable[] =
 
 #define super IOEthernetController
 
-OSDefineMetaClassAndStructors(AppleUSBCDCEEM, IOEthernetController);
+OSDefineMetaClassAndStructors(SPTUSBCDCEEM, IOEthernetController);
 
 /****************************************************************************************************/
 //
@@ -98,8 +98,8 @@ OSDefineMetaClassAndStructors(AppleUSBCDCEEM, IOEthernetController);
 
 IOReturn findCDCDriverEED(IOUSBDevice *myDevice, void *dataAddr, UInt8 dataInterfaceNum)
 {
-    AppleUSBCDCEEM	*me = (AppleUSBCDCEEM *)dataAddr;
-    AppleUSBCDC		*CDCDriver = NULL;
+    SPTUSBCDCEEM	*me = (SPTUSBCDCEEM *)dataAddr;
+    SPTUSBCDC		*CDCDriver = NULL;
     bool		driverOK = false;
     OSIterator		*iterator = NULL;
     OSDictionary	*matchingDictionary = NULL;
@@ -108,7 +108,7 @@ IOReturn findCDCDriverEED(IOUSBDevice *myDevice, void *dataAddr, UInt8 dataInter
         
         // Get matching dictionary
        	
-    matchingDictionary = IOService::serviceMatching("AppleUSBCDC");
+    matchingDictionary = IOService::serviceMatching("SPTUSBCDC");
     if (!matchingDictionary)
     {
         XTRACE(me, 0, 0, "findCDCDriverEED - Couldn't create a matching dictionary");
@@ -120,7 +120,7 @@ IOReturn findCDCDriverEED(IOUSBDevice *myDevice, void *dataAddr, UInt8 dataInter
     iterator = IOService::getMatchingServices(matchingDictionary);
     if (!iterator)
     {
-        XTRACE(me, 0, 0, "findCDCDriverEED - No AppleUSBCDC driver found!");
+        XTRACE(me, 0, 0, "findCDCDriverEED - No SPTUSBCDC driver found!");
         matchingDictionary->release();
         return kIOReturnError;
     }
@@ -128,7 +128,7 @@ IOReturn findCDCDriverEED(IOUSBDevice *myDevice, void *dataAddr, UInt8 dataInter
 #if 0    
 	// Use iterator to find driver (there's only one so we won't bother to iterate)
                 
-    CDCDriver = (AppleUSBCDC *)iterator->getNextObject();
+    CDCDriver = (SPTUSBCDC *)iterator->getNextObject();
     if (CDCDriver)
     {
         driverOK = CDCDriver->confirmDriver(kUSBEthernetEmulationModel, dataInterfaceNum);
@@ -137,7 +137,7 @@ IOReturn findCDCDriverEED(IOUSBDevice *myDevice, void *dataAddr, UInt8 dataInter
 
  	// Iterate until we find our matching CDC driver
                 
-    CDCDriver = (AppleUSBCDC *)iterator->getNextObject();
+    CDCDriver = (SPTUSBCDC *)iterator->getNextObject();
     while (CDCDriver)
     {
         XTRACE(me, 0, 0, "findCDCDriverEED - CDC driver candidate");
@@ -148,7 +148,7 @@ IOReturn findCDCDriverEED(IOUSBDevice *myDevice, void *dataAddr, UInt8 dataInter
             driverOK = CDCDriver->confirmDriver(kUSBEthernetEmulationModel, dataInterfaceNum);
             break;
         }
-        CDCDriver = (AppleUSBCDC *)iterator->getNextObject();
+        CDCDriver = (SPTUSBCDC *)iterator->getNextObject();
     }
 
     matchingDictionary->release();
@@ -180,7 +180,7 @@ IOReturn findCDCDriverEED(IOUSBDevice *myDevice, void *dataAddr, UInt8 dataInter
 
 /****************************************************************************************************/
 //
-//		Function:	AppleUSBCDCEEM::USBLogData
+//		Function:	SPTUSBCDCEEM::USBLogData
 //
 //		Inputs:		Dir - direction
 //				Count - number of bytes
@@ -192,7 +192,7 @@ IOReturn findCDCDriverEED(IOUSBDevice *myDevice, void *dataAddr, UInt8 dataInter
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCEEM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
+void SPTUSBCDCEEM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
 {    
     SInt32	wlen;
     UInt8	tDir = Dir;
@@ -204,13 +204,13 @@ void AppleUSBCDCEEM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
     switch (tDir)
     {
         case kDataIn:
-            Log("AppleUSBCDCEEM: USBLogData - Read Complete, address = %8p, size = %8d\n", (void *)buf, (UInt)Count);
+            Log("SPTUSBCDCEEM: USBLogData - Read Complete, address = %8p, size = %8d\n", (void *)buf, (UInt)Count);
             break;
         case kDataOut:
-            Log("AppleUSBCDCEEM: USBLogData - Write, address = %8p, size = %8d\n", (void *)buf, (UInt)Count);
+            Log("SPTUSBCDCEEM: USBLogData - Write, address = %8p, size = %8d\n", (void *)buf, (UInt)Count);
             break;
         case kDataOther:
-            Log("AppleUSBCDCEEM: USBLogData - Other, address = %8p, size = %8d\n", (void *)buf, (UInt)Count);
+            Log("SPTUSBCDCEEM: USBLogData - Other, address = %8p, size = %8d\n", (void *)buf, (UInt)Count);
             break;
         case kDataNone:
             tDir = kDataOther;
@@ -230,7 +230,7 @@ void AppleUSBCDCEEM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
 
     if (wlen == 0)
     {
-        Log("AppleUSBCDCEEM: USBLogData - No data, Count=0\n");
+        Log("SPTUSBCDCEEM: USBLogData - No data, Count=0\n");
         return;
     }
 
@@ -276,7 +276,7 @@ void AppleUSBCDCEEM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
 
 /****************************************************************************************************/
 //
-//		Function:	AppleUSBCDCEEM::dumpData
+//		Function:	SPTUSBCDCEEM::dumpData
 //
 //		Inputs:		buf - the data
 //				size - number of bytes
@@ -287,11 +287,11 @@ void AppleUSBCDCEEM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCEEM::dumpData(char *buf, SInt32 size)
+void SPTUSBCDCEEM::dumpData(char *buf, SInt32 size)
 {
     SInt32	curr, len, dlen;
 
-    Log("AppleUSBCDCEEM: dumpData - Address = %8p, size = %8d\n", (void *)buf, (UInt)size);
+    Log("SPTUSBCDCEEM: dumpData - Address = %8p, size = %8d\n", (void *)buf, (UInt)size);
 
     dlen = 0;
     len = size;
@@ -314,7 +314,7 @@ void AppleUSBCDCEEM::dumpData(char *buf, SInt32 size)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::dataReadComplete
+//		Method:		SPTUSBCDCEEM::dataReadComplete
 //
 //		Inputs:		obj - me
 //					param - pool index
@@ -327,9 +327,9 @@ void AppleUSBCDCEEM::dumpData(char *buf, SInt32 size)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCEEM::dataReadComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void SPTUSBCDCEEM::dataReadComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
-    AppleUSBCDCEEM	*me = (AppleUSBCDCEEM*)obj;
+    SPTUSBCDCEEM	*me = (SPTUSBCDCEEM*)obj;
     IOReturn		ior;
 	pipeInBuffers	*pipeBuf = (pipeInBuffers *)param;
 //    UInt32			poolIndx = (UInt32)param;
@@ -403,7 +403,7 @@ void AppleUSBCDCEEM::dataReadComplete(void *obj, void *param, IOReturn rc, UInt3
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::dataWriteComplete
+//		Method:		SPTUSBCDCEEM::dataWriteComplete
 //
 //		Inputs:		obj - me
 //				param - pool index
@@ -416,9 +416,9 @@ void AppleUSBCDCEEM::dataReadComplete(void *obj, void *param, IOReturn rc, UInt3
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCEEM::dataWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void SPTUSBCDCEEM::dataWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
-    AppleUSBCDCEEM	*me = (AppleUSBCDCEEM *)obj;
+    SPTUSBCDCEEM	*me = (SPTUSBCDCEEM *)obj;
     mbuf_t			m;
     UInt32			pktLen = 0;
     UInt32			numbufs = 0;
@@ -503,7 +503,7 @@ void AppleUSBCDCEEM::dataWriteComplete(void *obj, void *param, IOReturn rc, UInt
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::probe
+//		Method:		SPTUSBCDCEEM::probe
 //
 //		Inputs:		provider - my provider
 //
@@ -513,7 +513,7 @@ void AppleUSBCDCEEM::dataWriteComplete(void *obj, void *param, IOReturn rc, UInt
 //
 /****************************************************************************************************/
 
-IOService* AppleUSBCDCEEM::probe( IOService *provider, SInt32 *score )
+IOService* SPTUSBCDCEEM::probe( IOService *provider, SInt32 *score )
 { 
     IOService   *res;
 	
@@ -535,7 +535,7 @@ IOService* AppleUSBCDCEEM::probe( IOService *provider, SInt32 *score )
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::init
+//		Method:		SPTUSBCDCEEM::init
 //
 //		Inputs:		properties - data (keys and values) used to match
 //
@@ -545,7 +545,7 @@ IOService* AppleUSBCDCEEM::probe( IOService *provider, SInt32 *score )
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCEEM::init(OSDictionary *properties)
+bool SPTUSBCDCEEM::init(OSDictionary *properties)
 {
     UInt32	i;
 
@@ -587,7 +587,7 @@ bool AppleUSBCDCEEM::init(OSDictionary *properties)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::start
+//		Method:		SPTUSBCDCEEM::start
 //
 //		Inputs:		provider - my provider
 //
@@ -598,7 +598,7 @@ bool AppleUSBCDCEEM::init(OSDictionary *properties)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCEEM::start(IOService *provider)
+bool SPTUSBCDCEEM::start(IOService *provider)
 {
     OSNumber		*bufNumber = NULL;
     UInt16		bufValue = 0;
@@ -760,7 +760,7 @@ bool AppleUSBCDCEEM::start(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::stop
+//		Method:		SPTUSBCDCEEM::stop
 //
 //		Inputs:		provider - my provider
 //
@@ -770,7 +770,7 @@ bool AppleUSBCDCEEM::start(IOService *provider)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCEEM::stop(IOService *provider)
+void SPTUSBCDCEEM::stop(IOService *provider)
 {
     
     XTRACE(this, 0, 0, "stop");
@@ -824,7 +824,7 @@ void AppleUSBCDCEEM::stop(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::configureData
+//		Method:		SPTUSBCDCEEM::configureData
 //
 //		Inputs:		
 //
@@ -834,7 +834,7 @@ void AppleUSBCDCEEM::stop(IOService *provider)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCEEM::configureData()
+bool SPTUSBCDCEEM::configureData()
 {
     IOUSBFindInterfaceRequest		req;
     const IOUSBInterfaceDescriptor	*altInterfaceDesc;
@@ -908,7 +908,7 @@ bool AppleUSBCDCEEM::configureData()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::createNetworkInterface
+//		Method:		SPTUSBCDCEEM::createNetworkInterface
 //
 //		Inputs:		
 //
@@ -918,7 +918,7 @@ bool AppleUSBCDCEEM::configureData()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCEEM::createNetworkInterface()
+bool SPTUSBCDCEEM::createNetworkInterface()
 {
 	
     XTRACE(this, 0, 0, "createNetworkInterface");
@@ -950,7 +950,7 @@ bool AppleUSBCDCEEM::createNetworkInterface()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::enable
+//		Method:		SPTUSBCDCEEM::enable
 //
 //		Inputs:		netif - the interface being enabled
 //
@@ -962,7 +962,7 @@ bool AppleUSBCDCEEM::createNetworkInterface()
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::enable(IONetworkInterface *netif)
+IOReturn SPTUSBCDCEEM::enable(IONetworkInterface *netif)
 {
     IONetworkMedium	*medium;
     IOMediumType    	mediumType = kIOMediumEthernet10BaseT | kIOMediumOptionFullDuplex;
@@ -1018,7 +1018,7 @@ IOReturn AppleUSBCDCEEM::enable(IONetworkInterface *netif)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::disable
+//		Method:		SPTUSBCDCEEM::disable
 //
 //		Inputs:		netif - the interface being disabled
 //
@@ -1030,7 +1030,7 @@ IOReturn AppleUSBCDCEEM::enable(IONetworkInterface *netif)
 //
 /****************************************************************************************************/
  
-IOReturn AppleUSBCDCEEM::disable(IONetworkInterface *netif)
+IOReturn SPTUSBCDCEEM::disable(IONetworkInterface *netif)
 {
 
     XTRACE(this, 0, 0, "disable");
@@ -1056,7 +1056,7 @@ IOReturn AppleUSBCDCEEM::disable(IONetworkInterface *netif)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::setWakeOnMagicPacket
+//		Method:		SPTUSBCDCEEM::setWakeOnMagicPacket
 //
 //		Inputs:		active - true(wake), false(don't)
 //
@@ -1066,7 +1066,7 @@ IOReturn AppleUSBCDCEEM::disable(IONetworkInterface *netif)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::setWakeOnMagicPacket(bool active)
+IOReturn SPTUSBCDCEEM::setWakeOnMagicPacket(bool active)
 {
     IOUSBDevRequest	devreq;
     IOReturn		ior = kIOReturnSuccess;
@@ -1110,7 +1110,7 @@ IOReturn AppleUSBCDCEEM::setWakeOnMagicPacket(bool active)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::getPacketFilters
+//		Method:		SPTUSBCDCEEM::getPacketFilters
 //
 //		Inputs:		group - the filter group
 //
@@ -1121,7 +1121,7 @@ IOReturn AppleUSBCDCEEM::setWakeOnMagicPacket(bool active)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::getPacketFilters(const OSSymbol *group, UInt32 *filters) const
+IOReturn SPTUSBCDCEEM::getPacketFilters(const OSSymbol *group, UInt32 *filters) const
 {
     IOReturn	rtn = kIOReturnSuccess;
     
@@ -1155,7 +1155,7 @@ IOReturn AppleUSBCDCEEM::getPacketFilters(const OSSymbol *group, UInt32 *filters
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::selectMedium
+//		Method:		SPTUSBCDCEEM::selectMedium
 //
 //		Inputs:
 //
@@ -1165,7 +1165,7 @@ IOReturn AppleUSBCDCEEM::getPacketFilters(const OSSymbol *group, UInt32 *filters
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::selectMedium(const IONetworkMedium *medium)
+IOReturn SPTUSBCDCEEM::selectMedium(const IONetworkMedium *medium)
 {
     
     XTRACE(this, 0, 0, "selectMedium");
@@ -1178,7 +1178,7 @@ IOReturn AppleUSBCDCEEM::selectMedium(const IONetworkMedium *medium)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::getHardwareAddress
+//		Method:		SPTUSBCDCEEM::getHardwareAddress
 //
 //		Inputs:		
 //
@@ -1190,7 +1190,7 @@ IOReturn AppleUSBCDCEEM::selectMedium(const IONetworkMedium *medium)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::getHardwareAddress(IOEthernetAddress *ea)
+IOReturn SPTUSBCDCEEM::getHardwareAddress(IOEthernetAddress *ea)
 {
     UInt32      i;
 	OSNumber	*location;
@@ -1221,7 +1221,7 @@ IOReturn AppleUSBCDCEEM::getHardwareAddress(IOEthernetAddress *ea)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::newVendorString
+//		Method:		SPTUSBCDCEEM::newVendorString
 //
 //		Inputs:		
 //
@@ -1231,7 +1231,7 @@ IOReturn AppleUSBCDCEEM::getHardwareAddress(IOEthernetAddress *ea)
 //
 /****************************************************************************************************/
 
-const OSString* AppleUSBCDCEEM::newVendorString() const
+const OSString* SPTUSBCDCEEM::newVendorString() const
 {
 
     XTRACE(this, 0, 0, "newVendorString");
@@ -1242,7 +1242,7 @@ const OSString* AppleUSBCDCEEM::newVendorString() const
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::newModelString
+//		Method:		SPTUSBCDCEEM::newModelString
 //
 //		Inputs:		
 //
@@ -1252,7 +1252,7 @@ const OSString* AppleUSBCDCEEM::newVendorString() const
 //
 /****************************************************************************************************/
 
-const OSString* AppleUSBCDCEEM::newModelString() const
+const OSString* SPTUSBCDCEEM::newModelString() const
 {
 
     XTRACE(this, 0, 0, "newModelString");
@@ -1263,7 +1263,7 @@ const OSString* AppleUSBCDCEEM::newModelString() const
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::newRevisionString
+//		Method:		SPTUSBCDCEEM::newRevisionString
 //
 //		Inputs:		
 //
@@ -1273,7 +1273,7 @@ const OSString* AppleUSBCDCEEM::newModelString() const
 //
 /****************************************************************************************************/
 
-const OSString* AppleUSBCDCEEM::newRevisionString() const
+const OSString* SPTUSBCDCEEM::newRevisionString() const
 {
 
     XTRACE(this, 0, 0, "newRevisionString");
@@ -1284,7 +1284,7 @@ const OSString* AppleUSBCDCEEM::newRevisionString() const
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::setMulticastMode
+//		Method:		SPTUSBCDCEEM::setMulticastMode
 //
 //		Inputs:		active - true (set it), false (don't)
 //
@@ -1294,7 +1294,7 @@ const OSString* AppleUSBCDCEEM::newRevisionString() const
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::setMulticastMode(bool active)
+IOReturn SPTUSBCDCEEM::setMulticastMode(bool active)
 {
 
     XTRACE(this, 0, active, "setMulticastMode");
@@ -1305,7 +1305,7 @@ IOReturn AppleUSBCDCEEM::setMulticastMode(bool active)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::setMulticastList
+//		Method:		SPTUSBCDCEEM::setMulticastList
 //
 //		Inputs:		addrs - list of addresses
 //				count - number in the list
@@ -1316,7 +1316,7 @@ IOReturn AppleUSBCDCEEM::setMulticastMode(bool active)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::setMulticastList(IOEthernetAddress *addrs, UInt32 count)
+IOReturn SPTUSBCDCEEM::setMulticastList(IOEthernetAddress *addrs, UInt32 count)
 {
 //    bool	uStat;
     
@@ -1328,7 +1328,7 @@ IOReturn AppleUSBCDCEEM::setMulticastList(IOEthernetAddress *addrs, UInt32 count
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::setPromiscuousMode
+//		Method:		SPTUSBCDCEEM::setPromiscuousMode
 //
 //		Inputs:		active - true (set it), false (don't)
 //
@@ -1338,7 +1338,7 @@ IOReturn AppleUSBCDCEEM::setMulticastList(IOEthernetAddress *addrs, UInt32 count
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::setPromiscuousMode(bool active)
+IOReturn SPTUSBCDCEEM::setPromiscuousMode(bool active)
 {
     
     XTRACE(this, 0, active, "setPromiscuousMode");
@@ -1349,7 +1349,7 @@ IOReturn AppleUSBCDCEEM::setPromiscuousMode(bool active)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::createOutputQueue
+//		Method:		SPTUSBCDCEEM::createOutputQueue
 //
 //		Inputs:		
 //
@@ -1359,7 +1359,7 @@ IOReturn AppleUSBCDCEEM::setPromiscuousMode(bool active)
 //
 /****************************************************************************************************/
 
-IOOutputQueue* AppleUSBCDCEEM::createOutputQueue()
+IOOutputQueue* SPTUSBCDCEEM::createOutputQueue()
 {
 
     XTRACE(this, 0, 0, "createOutputQueue");
@@ -1370,7 +1370,7 @@ IOOutputQueue* AppleUSBCDCEEM::createOutputQueue()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::outputPacket
+//		Method:		SPTUSBCDCEEM::outputPacket
 //
 //		Inputs:		mbuf - the packet
 //				param - optional parameter
@@ -1382,7 +1382,7 @@ IOOutputQueue* AppleUSBCDCEEM::createOutputQueue()
 //
 /****************************************************************************************************/
 
-UInt32 AppleUSBCDCEEM::outputPacket(mbuf_t pkt, void *param)
+UInt32 SPTUSBCDCEEM::outputPacket(mbuf_t pkt, void *param)
 {
     UInt32	ior = kIOReturnSuccess;
     
@@ -1410,7 +1410,7 @@ UInt32 AppleUSBCDCEEM::outputPacket(mbuf_t pkt, void *param)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::configureInterface
+//		Method:		SPTUSBCDCEEM::configureInterface
 //
 //		Inputs:		netif - the interface being configured
 //
@@ -1420,7 +1420,7 @@ UInt32 AppleUSBCDCEEM::outputPacket(mbuf_t pkt, void *param)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCEEM::configureInterface(IONetworkInterface *netif)
+bool SPTUSBCDCEEM::configureInterface(IONetworkInterface *netif)
 {
     IONetworkData	*nd;
 
@@ -1456,7 +1456,7 @@ bool AppleUSBCDCEEM::configureInterface(IONetworkInterface *netif)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::wakeUp
+//		Method:		SPTUSBCDCEEM::wakeUp
 //
 //		Inputs:		
 //
@@ -1467,7 +1467,7 @@ bool AppleUSBCDCEEM::configureInterface(IONetworkInterface *netif)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCEEM::wakeUp()
+bool SPTUSBCDCEEM::wakeUp()
 {
     IOReturn 	rtn = kIOReturnSuccess;
     UInt32	i;
@@ -1528,7 +1528,7 @@ bool AppleUSBCDCEEM::wakeUp()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::putToSleep
+//		Method:		SPTUSBCDCEEM::putToSleep
 //
 //		Inputs:		
 //
@@ -1538,7 +1538,7 @@ bool AppleUSBCDCEEM::wakeUp()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCEEM::putToSleep()
+void SPTUSBCDCEEM::putToSleep()
 {
 
     XTRACE(this, 0, 0, "putToSleep");
@@ -1551,7 +1551,7 @@ void AppleUSBCDCEEM::putToSleep()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::createMediumTables
+//		Method:		SPTUSBCDCEEM::createMediumTables
 //
 //		Inputs:		
 //
@@ -1561,7 +1561,7 @@ void AppleUSBCDCEEM::putToSleep()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCEEM::createMediumTables()
+bool SPTUSBCDCEEM::createMediumTables()
 {
     IONetworkMedium	*medium;
     UInt64		maxSpeed;
@@ -1602,7 +1602,7 @@ bool AppleUSBCDCEEM::createMediumTables()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::allocateResources
+//		Method:		SPTUSBCDCEEM::allocateResources
 //
 //		Inputs:		
 //
@@ -1612,7 +1612,7 @@ bool AppleUSBCDCEEM::createMediumTables()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCEEM::allocateResources()
+bool SPTUSBCDCEEM::allocateResources()
 {
     IOUSBFindEndpointRequest		epReq;
     UInt32				i;
@@ -1691,7 +1691,7 @@ bool AppleUSBCDCEEM::allocateResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::releaseResources
+//		Method:		SPTUSBCDCEEM::releaseResources
 //
 //		Inputs:		
 //
@@ -1701,7 +1701,7 @@ bool AppleUSBCDCEEM::allocateResources()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCEEM::releaseResources()
+void SPTUSBCDCEEM::releaseResources()
 {
     UInt32	i;
     
@@ -1738,7 +1738,7 @@ void AppleUSBCDCEEM::releaseResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::getOutputBuffer
+//		Method:		SPTUSBCDCEEM::getOutputBuffer
 //
 //		Inputs:		bufIndx - index of an available buffer
 //
@@ -1748,7 +1748,7 @@ void AppleUSBCDCEEM::releaseResources()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCEEM::getOutputBuffer(UInt32 *bufIndx)
+bool SPTUSBCDCEEM::getOutputBuffer(UInt32 *bufIndx)
 {
 	bool	gotBuffer = false;
 	UInt32	indx;
@@ -1804,7 +1804,7 @@ bool AppleUSBCDCEEM::getOutputBuffer(UInt32 *bufIndx)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::USBTransmitPacket
+//		Method:		SPTUSBCDCEEM::USBTransmitPacket
 //
 //		Inputs:		packet - the packet
 //
@@ -1814,7 +1814,7 @@ bool AppleUSBCDCEEM::getOutputBuffer(UInt32 *bufIndx)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::USBTransmitPacket(mbuf_t packet)
+IOReturn SPTUSBCDCEEM::USBTransmitPacket(mbuf_t packet)
 {
     UInt32		numbufs = 0;			// number of mbufs for this packet
     mbuf_t		m;					// current mbuf
@@ -1898,7 +1898,7 @@ IOReturn AppleUSBCDCEEM::USBTransmitPacket(mbuf_t packet)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::USBSendCommand
+//		Method:		SPTUSBCDCEEM::USBSendCommand
 //
 //		Inputs:		command - the command to be sent
 //					length - length of any data to be sent
@@ -1910,7 +1910,7 @@ IOReturn AppleUSBCDCEEM::USBTransmitPacket(mbuf_t packet)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::USBSendCommand(UInt16 command, UInt16 length, UInt8 *anyData)
+IOReturn SPTUSBCDCEEM::USBSendCommand(UInt16 command, UInt16 length, UInt8 *anyData)
 {
 	IOReturn	ior = kIOReturnSuccess;
     UInt32		indx;
@@ -2006,7 +2006,7 @@ IOReturn AppleUSBCDCEEM::USBSendCommand(UInt16 command, UInt16 length, UInt8 *an
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::clearPipeStall
+//		Method:		SPTUSBCDCEEM::clearPipeStall
 //
 //		Inputs:		thePipe - the pipe
 //
@@ -2016,7 +2016,7 @@ IOReturn AppleUSBCDCEEM::USBSendCommand(UInt16 command, UInt16 length, UInt8 *an
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::clearPipeStall(IOUSBPipe *thePipe)
+IOReturn SPTUSBCDCEEM::clearPipeStall(IOUSBPipe *thePipe)
 {
     IOReturn 	rtn = kIOReturnSuccess;
     
@@ -2042,7 +2042,7 @@ IOReturn AppleUSBCDCEEM::clearPipeStall(IOUSBPipe *thePipe)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::receivePacket
+//		Method:		SPTUSBCDCEEM::receivePacket
 //
 //		Inputs:		packet - the packet
 //				size - Number of bytes in the packet
@@ -2053,7 +2053,7 @@ IOReturn AppleUSBCDCEEM::clearPipeStall(IOUSBPipe *thePipe)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCEEM::receivePacket(UInt8 *packet, UInt32 size)
+void SPTUSBCDCEEM::receivePacket(UInt8 *packet, UInt32 size)
 {
     mbuf_t		m;
     UInt32		submit;
@@ -2083,7 +2083,7 @@ void AppleUSBCDCEEM::receivePacket(UInt8 *packet, UInt32 size)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::processEEMCommand
+//		Method:		SPTUSBCDCEEM::processEEMCommand
 //
 //		Inputs:		EEMHeader - the EEM packet header
 //					poolIndx - Index into the buffer pool
@@ -2095,7 +2095,7 @@ void AppleUSBCDCEEM::receivePacket(UInt8 *packet, UInt32 size)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCEEM::processEEMCommand(UInt16 EEMHeader, UInt32 poolIndx, SInt16 dataIndx, SInt16 *len)
+void SPTUSBCDCEEM::processEEMCommand(UInt16 EEMHeader, UInt32 poolIndx, SInt16 dataIndx, SInt16 *len)
 {
 	IOReturn 	rtn = kIOReturnSuccess;
 	UInt16		EEMCommand;
@@ -2157,7 +2157,7 @@ void AppleUSBCDCEEM::processEEMCommand(UInt16 EEMHeader, UInt32 poolIndx, SInt16
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCEEM::message
+//		Method:		SPTUSBCDCEEM::message
 //
 //		Inputs:		type - message type
 //				provider - my provider
@@ -2169,7 +2169,7 @@ void AppleUSBCDCEEM::processEEMCommand(UInt16 EEMHeader, UInt32 poolIndx, SInt16
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCEEM::message(UInt32 type, IOService *provider, void *argument)
+IOReturn SPTUSBCDCEEM::message(UInt32 type, IOService *provider, void *argument)
 {
     UInt16	i;
     IOReturn	ior;
@@ -2193,7 +2193,7 @@ IOReturn AppleUSBCDCEEM::message(UInt32 type, IOService *provider, void *argumen
 			0,		// Flags (for later usage)
 			"",		// iconPath (not supported yet)
 			"",		// soundPath (not supported yet)
-			"/System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/AppleUSBCDCEEM.kext",	// localizationPath
+			"/System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDCEEM.kext",	// localizationPath
 			"Unplug Header",		// the header
 			"Unplug Notice",		// the notice - look in Localizable.strings
 			"OK"); 

@@ -25,9 +25,9 @@
 #ifndef __APPLEUSBCDCECMData__
 #define __APPLEUSBCDCECMData__
 
-#include "AppleUSBCDCCommon.h"
-#include "AppleUSBCDC.h"
-#include "AppleUSBCDCECMControl.h"
+#include "SPTUSBCDCCommon.h"
+#include "SPTUSBCDC.h"
+#include "SPTUSBCDCECMControl.h"
 
 #define TRANSMIT_QUEUE_SIZE     PAGE_SIZE
 #define WATCHDOG_TIMER_MS       1000
@@ -71,12 +71,12 @@ typedef struct
 	UInt32			indx;
 } pipeInBuffers;
 
-class AppleUSBCDC;
-class AppleUSBCDCECMControl;
+class SPTUSBCDC;
+class SPTUSBCDCECMControl;
 
-class AppleUSBCDCECMData : public IOEthernetController
+class SPTUSBCDCECMData : public IOEthernetController
 {
-    OSDeclareDefaultStructors(AppleUSBCDCECMData);	// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(SPTUSBCDCECMData);	// Constructor & Destructor stuff
 
 private:
     bool			fTerminate;				// Are we being terminated (ie the device was unplugged)
@@ -138,7 +138,7 @@ public:
     virtual void			dumpData(char *buf, SInt32 size);
 #endif
 
-	AppleUSBCDCECMControl		*fControlDriver;			// Our Control driver
+	SPTUSBCDCECMControl		*fControlDriver;			// Our Control driver
     IOUSBInterface		*fDataInterface;
     IOWorkLoop			*fWorkLoop;
     UInt8			fDataInterfaceNumber;
@@ -192,5 +192,5 @@ public:
     virtual bool			configureInterface(IONetworkInterface *netif);
 	virtual IOReturn		registerWithPolicyMaker(IOService *policyMaker);
 												
-}; /* end class AppleUSBCDCECMData */
+}; /* end class SPTUSBCDCECMData */
 #endif

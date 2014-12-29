@@ -22,7 +22,7 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
-    /* AppleUSBCDCDMM.cpp - MacOSX implementation of		*/
+    /* SPTUSBCDCDMM.cpp - MacOSX implementation of		*/
     /* USB Communication Device Class (CDC) Driver, DMM Interface.	*/
 
 #include <machine/limits.h>			/* UINT_MAX */
@@ -54,9 +54,9 @@
 
 #include <UserNotification/KUNCUserNotifications.h>
 
-#define DEBUG_NAME "AppleUSBCDCDMM"
+#define DEBUG_NAME "SPTUSBCDCDMM"
 
-#include "AppleUSBCDCDMM.h"
+#include "SPTUSBCDCDMM.h"
 
 #define MIN_BAUD (50 << 1)
 
@@ -64,7 +64,7 @@
 
 #define super IOSerialDriverSync
 
-OSDefineMetaClassAndStructors(AppleUSBCDCDMM, IOSerialDriverSync);
+OSDefineMetaClassAndStructors(SPTUSBCDCDMM, IOSerialDriverSync);
 
 #if LOG_DATA
 #define dumplen		32		// Set this to the number of bytes to dump and the rest should work out correct
@@ -86,7 +86,7 @@ OSDefineMetaClassAndStructors(AppleUSBCDCDMM, IOSerialDriverSync);
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
+void SPTUSBCDCDMM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
 {    
     SInt32	wlen;
     SInt32	llen, rlen;
@@ -97,13 +97,13 @@ void AppleUSBCDCDMM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
     switch (Dir)
     {
         case kDataIn:
-            Log( "AppleUSBCDCDMM: USBLogData - Read Complete, address = %8p, size = %8d\n", (void *)buf, (UInt)Count );
+            Log( "SPTUSBCDCDMM: USBLogData - Read Complete, address = %8p, size = %8d\n", (void *)buf, (UInt)Count );
             break;
         case kDataOut:
-            Log( "AppleUSBCDCDMM: USBLogData - Write, address = %8p, size = %8d\n", (void *)buf, (UInt)Count );
+            Log( "SPTUSBCDCDMM: USBLogData - Write, address = %8p, size = %8d\n", (void *)buf, (UInt)Count );
             break;
         case kDataOther:
-            Log( "AppleUSBCDCDMM: USBLogData - Other, address = %8p, size = %8d\n", (void *)buf, (UInt)Count );
+            Log( "SPTUSBCDCDMM: USBLogData - Other, address = %8p, size = %8d\n", (void *)buf, (UInt)Count );
             break;
     }
 
@@ -120,7 +120,7 @@ void AppleUSBCDCDMM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
 
     if (wlen == 0)
     {
-        Log( "AppleUSBCDCDMM: USBLogData - No data, Count=0\n" );
+        Log( "SPTUSBCDCDMM: USBLogData - No data, Count=0\n" );
         return;
     }
 
@@ -180,7 +180,7 @@ void AppleUSBCDCDMM::USBLogData(UInt8 Dir, SInt32 Count, char *buf)
 //
 /****************************************************************************************************/
 
-QueueStatus AppleUSBCDCDMM::AddBytetoQueue(CirQueue *Queue, char Value)
+QueueStatus SPTUSBCDCDMM::AddBytetoQueue(CirQueue *Queue, char Value)
 {
     
     if ((Queue->NextChar == Queue->LastChar) && Queue->InQueue)
@@ -213,7 +213,7 @@ QueueStatus AppleUSBCDCDMM::AddBytetoQueue(CirQueue *Queue, char Value)
 //
 /****************************************************************************************************/
 
-QueueStatus AppleUSBCDCDMM::GetBytetoQueue(CirQueue *Queue, UInt8 *Value)
+QueueStatus SPTUSBCDCDMM::GetBytetoQueue(CirQueue *Queue, UInt8 *Value)
 {
     
     if ((Queue->NextChar == Queue->LastChar) && !Queue->InQueue)
@@ -247,7 +247,7 @@ QueueStatus AppleUSBCDCDMM::GetBytetoQueue(CirQueue *Queue, UInt8 *Value)
 //
 /****************************************************************************************************/
 
-QueueStatus AppleUSBCDCDMM::InitQueue(CirQueue *Queue, UInt8 *Buffer, size_t Size)
+QueueStatus SPTUSBCDCDMM::InitQueue(CirQueue *Queue, UInt8 *Buffer, size_t Size)
 {
     Queue->Start	= Buffer;
     Queue->End		= (UInt8*)((size_t)Buffer + Size);
@@ -274,7 +274,7 @@ QueueStatus AppleUSBCDCDMM::InitQueue(CirQueue *Queue, UInt8 *Buffer, size_t Siz
 //
 /****************************************************************************************************/
 
-QueueStatus AppleUSBCDCDMM::CloseQueue(CirQueue *Queue)
+QueueStatus SPTUSBCDCDMM::CloseQueue(CirQueue *Queue)
 {
 
     Queue->Start	= 0;
@@ -301,7 +301,7 @@ QueueStatus AppleUSBCDCDMM::CloseQueue(CirQueue *Queue)
 //
 /****************************************************************************************************/
 
-size_t AppleUSBCDCDMM::AddtoQueue(CirQueue *Queue, UInt8 *Buffer, size_t Size)
+size_t SPTUSBCDCDMM::AddtoQueue(CirQueue *Queue, UInt8 *Buffer, size_t Size)
 {
     size_t	BytesWritten = 0;
 
@@ -329,7 +329,7 @@ size_t AppleUSBCDCDMM::AddtoQueue(CirQueue *Queue, UInt8 *Buffer, size_t Size)
 //
 /****************************************************************************************************/
 
-size_t AppleUSBCDCDMM::RemovefromQueue(CirQueue *Queue, UInt8 *Buffer, size_t MaxSize)
+size_t SPTUSBCDCDMM::RemovefromQueue(CirQueue *Queue, UInt8 *Buffer, size_t MaxSize)
 {
     size_t	BytesReceived = 0;
     UInt8	Value;
@@ -357,7 +357,7 @@ size_t AppleUSBCDCDMM::RemovefromQueue(CirQueue *Queue, UInt8 *Buffer, size_t Ma
 //
 /****************************************************************************************************/
 
-size_t AppleUSBCDCDMM::FreeSpaceinQueue(CirQueue *Queue)
+size_t SPTUSBCDCDMM::FreeSpaceinQueue(CirQueue *Queue)
 {
     size_t	retVal = 0;
     
@@ -379,7 +379,7 @@ size_t AppleUSBCDCDMM::FreeSpaceinQueue(CirQueue *Queue)
 //
 /****************************************************************************************************/
 
-size_t AppleUSBCDCDMM::UsedSpaceinQueue(CirQueue *Queue)
+size_t SPTUSBCDCDMM::UsedSpaceinQueue(CirQueue *Queue)
 {
     return Queue->InQueue;
 	
@@ -397,7 +397,7 @@ size_t AppleUSBCDCDMM::UsedSpaceinQueue(CirQueue *Queue)
 //
 /****************************************************************************************************/
 
-size_t AppleUSBCDCDMM::GetQueueSize(CirQueue *Queue)
+size_t SPTUSBCDCDMM::GetQueueSize(CirQueue *Queue)
 {
     return Queue->Size;
 	
@@ -415,7 +415,7 @@ size_t AppleUSBCDCDMM::GetQueueSize(CirQueue *Queue)
 //
 /****************************************************************************************************/
 
-QueueStatus AppleUSBCDCDMM::GetQueueStatus(CirQueue *Queue)
+QueueStatus SPTUSBCDCDMM::GetQueueStatus(CirQueue *Queue)
 {
     if ((Queue->NextChar == Queue->LastChar) && Queue->InQueue)
         return queueFull;
@@ -438,7 +438,7 @@ QueueStatus AppleUSBCDCDMM::GetQueueStatus(CirQueue *Queue)
 //
 /****************************************************************************************************/
 
-UInt16 AppleUSBCDCDMM::isCRinQueue(CirQueue *Queue)
+UInt16 SPTUSBCDCDMM::isCRinQueue(CirQueue *Queue)
 {
     UInt8	*last;
 	bool	done = false;
@@ -488,7 +488,7 @@ UInt16 AppleUSBCDCDMM::isCRinQueue(CirQueue *Queue)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::CheckQueues()
+void SPTUSBCDCDMM::CheckQueues()
 {
     UInt32	Used;
     UInt32	Free;
@@ -571,7 +571,7 @@ void AppleUSBCDCDMM::CheckQueues()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::intReadComplete
+//		Method:		SPTUSBCDCDMM::intReadComplete
 //
 //		Inputs:		obj - me
 //				rc - return code
@@ -583,9 +583,9 @@ void AppleUSBCDCDMM::CheckQueues()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::intReadComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void SPTUSBCDCDMM::intReadComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
-    AppleUSBCDCDMM	*me = (AppleUSBCDCDMM*)obj;
+    SPTUSBCDCDMM	*me = (SPTUSBCDCDMM*)obj;
     IOReturn			ior;
     UInt32			dLen;
     
@@ -631,7 +631,7 @@ void AppleUSBCDCDMM::intReadComplete(void *obj, void *param, IOReturn rc, UInt32
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::merWriteComplete
+//		Method:		SPTUSBCDCDMM::merWriteComplete
 //
 //		Inputs:		obj - me
 //				param - MER 
@@ -644,10 +644,10 @@ void AppleUSBCDCDMM::intReadComplete(void *obj, void *param, IOReturn rc, UInt32
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::merWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void SPTUSBCDCDMM::merWriteComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
 #if LDEBUG
-	AppleUSBCDCDMM	*me = (AppleUSBCDCDMM*)obj;
+	SPTUSBCDCDMM	*me = (SPTUSBCDCDMM*)obj;
 #endif
     IOUSBDevRequest		*MER = (IOUSBDevRequest *)param;
     UInt16			dataLen;
@@ -684,7 +684,7 @@ void AppleUSBCDCDMM::merWriteComplete(void *obj, void *param, IOReturn rc, UInt3
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::rspComplete
+//		Method:		SPTUSBCDCDMM::rspComplete
 //
 //		Inputs:		obj - me
 //				param - MER 
@@ -697,9 +697,9 @@ void AppleUSBCDCDMM::merWriteComplete(void *obj, void *param, IOReturn rc, UInt3
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::rspComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
+void SPTUSBCDCDMM::rspComplete(void *obj, void *param, IOReturn rc, UInt32 remaining)
 {
-	AppleUSBCDCDMM  *me = (AppleUSBCDCDMM*)obj;
+	SPTUSBCDCDMM  *me = (SPTUSBCDCDMM*)obj;
     IOUSBDevRequest *MER = (IOUSBDevRequest *)param;
     UInt16			dataLen;
     
@@ -744,7 +744,7 @@ void AppleUSBCDCDMM::rspComplete(void *obj, void *param, IOReturn rc, UInt32 rem
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::probe
+//		Method:		SPTUSBCDCDMM::probe
 //
 //		Inputs:		provider - my provider
 //
@@ -754,7 +754,7 @@ void AppleUSBCDCDMM::rspComplete(void *obj, void *param, IOReturn rc, UInt32 rem
 //
 /****************************************************************************************************/
 
-IOService* AppleUSBCDCDMM::probe( IOService *provider, SInt32 *score )
+IOService* SPTUSBCDCDMM::probe( IOService *provider, SInt32 *score )
 { 
     IOService   *res;
 		
@@ -776,7 +776,7 @@ IOService* AppleUSBCDCDMM::probe( IOService *provider, SInt32 *score )
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::start
+//		Method:		SPTUSBCDCDMM::start
 //
 //		Inputs:		provider - my provider
 //
@@ -787,7 +787,7 @@ IOService* AppleUSBCDCDMM::probe( IOService *provider, SInt32 *score )
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCDMM::start(IOService *provider)
+bool SPTUSBCDCDMM::start(IOService *provider)
 {
     
     fSessions = 0;
@@ -871,7 +871,7 @@ bool AppleUSBCDCDMM::start(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::stop
+//		Method:		SPTUSBCDCDMM::stop
 //
 //		Inputs:		provider - my provider
 //
@@ -881,7 +881,7 @@ bool AppleUSBCDCDMM::start(IOService *provider)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::stop(IOService *provider)
+void SPTUSBCDCDMM::stop(IOService *provider)
 {
     IOReturn	ret;
     
@@ -901,16 +901,16 @@ void AppleUSBCDCDMM::stop(IOService *provider)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::stopAction
+//		Method:		SPTUSBCDCDMM::stopAction
 //
 //		Desc:		Dummy pass through for stopGated.
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::stopAction(OSObject *owner, void *, void *, void *, void *)
+IOReturn SPTUSBCDCDMM::stopAction(OSObject *owner, void *, void *, void *, void *)
 {
 
-    ((AppleUSBCDCDMM *)owner)->stopGated();
+    ((SPTUSBCDCDMM *)owner)->stopGated();
     
     return kIOReturnSuccess;
     
@@ -918,7 +918,7 @@ IOReturn AppleUSBCDCDMM::stopAction(OSObject *owner, void *, void *, void *, voi
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::stopGated
+//		Method:		SPTUSBCDCDMM::stopGated
 //
 //		Inputs:		
 //
@@ -928,7 +928,7 @@ IOReturn AppleUSBCDCDMM::stopAction(OSObject *owner, void *, void *, void *, voi
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::stopGated()
+void SPTUSBCDCDMM::stopGated()
 {
     
     XTRACE(this, 0, 0, "stopGated");
@@ -939,7 +939,7 @@ void AppleUSBCDCDMM::stopGated()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::configureDMM
+//		Method:		SPTUSBCDCDMM::configureDMM
 //
 //		Inputs:		
 //
@@ -949,7 +949,7 @@ void AppleUSBCDCDMM::stopGated()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCDMM::configureDMM()
+bool SPTUSBCDCDMM::configureDMM()
 {
     
     XTRACE(this, 0, 0, "configureDMM");
@@ -969,7 +969,7 @@ bool AppleUSBCDCDMM::configureDMM()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::getFunctionalDescriptors
+//		Method:		SPTUSBCDCDMM::getFunctionalDescriptors
 //
 //		Inputs:		
 //
@@ -979,7 +979,7 @@ bool AppleUSBCDCDMM::configureDMM()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCDMM::getFunctionalDescriptors()
+bool SPTUSBCDCDMM::getFunctionalDescriptors()
 {
     bool				gotDescriptors = false;
     UInt16				vers;
@@ -1035,7 +1035,7 @@ bool AppleUSBCDCDMM::getFunctionalDescriptors()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::createSuffix
+//		Method:		SPTUSBCDCDMM::createSuffix
 //
 //		Inputs:		
 //
@@ -1053,7 +1053,7 @@ bool AppleUSBCDCDMM::getFunctionalDescriptors()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCDMM::createSuffix(unsigned char *sufKey)
+bool SPTUSBCDCDMM::createSuffix(unsigned char *sufKey)
 {
     
     IOReturn	rc;
@@ -1125,7 +1125,7 @@ bool AppleUSBCDCDMM::createSuffix(unsigned char *sufKey)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::createSerialStream
+//		Method:		SPTUSBCDCDMM::createSerialStream
 //
 //		Inputs:		
 //
@@ -1135,7 +1135,7 @@ bool AppleUSBCDCDMM::createSuffix(unsigned char *sufKey)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCDMM::createSerialStream()
+bool SPTUSBCDCDMM::createSerialStream()
 {
     IOModemSerialStreamSync	*pNub = new IOModemSerialStreamSync;
     bool			ret;
@@ -1182,7 +1182,7 @@ bool AppleUSBCDCDMM::createSerialStream()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::acquirePort
+//		Method:		SPTUSBCDCDMM::acquirePort
 //
 //		Inputs:		sleep - true (wait for it), false (don't)
 //				refCon - unused
@@ -1193,7 +1193,7 @@ bool AppleUSBCDCDMM::createSerialStream()
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::acquirePort(bool sleep, void *refCon)
+IOReturn SPTUSBCDCDMM::acquirePort(bool sleep, void *refCon)
 {
     IOReturn                ret;
     
@@ -1225,22 +1225,22 @@ IOReturn AppleUSBCDCDMM::acquirePort(bool sleep, void *refCon)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::acquirePortAction
+//		Method:		SPTUSBCDCDMM::acquirePortAction
 //
 //		Desc:		Dummy pass through for acquirePortGated.
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::acquirePortAction(OSObject *owner, void *arg0, void *, void *, void *)
+IOReturn SPTUSBCDCDMM::acquirePortAction(OSObject *owner, void *arg0, void *, void *, void *)
 {
 
-    return ((AppleUSBCDCDMM *)owner)->acquirePortGated((bool)arg0);
+    return ((SPTUSBCDCDMM *)owner)->acquirePortGated((bool)arg0);
     
 }/* end acquirePortAction */
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::acquirePortGated
+//		Method:		SPTUSBCDCDMM::acquirePortGated
 //
 //		Inputs:		sleep - true (wait for it), false (don't)
 //
@@ -1254,7 +1254,7 @@ IOReturn AppleUSBCDCDMM::acquirePortAction(OSObject *owner, void *arg0, void *, 
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::acquirePortGated(bool sleep)
+IOReturn SPTUSBCDCDMM::acquirePortGated(bool sleep)
 {
     UInt32 	busyState = 0;
 	UInt32	state;
@@ -1310,7 +1310,7 @@ IOReturn AppleUSBCDCDMM::acquirePortGated(bool sleep)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::releasePort
+//		Method:		SPTUSBCDCDMM::releasePort
 //
 //		Inputs:		refCon - unused
 //
@@ -1320,7 +1320,7 @@ IOReturn AppleUSBCDCDMM::acquirePortGated(bool sleep)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::releasePort(void *refCon)
+IOReturn SPTUSBCDCDMM::releasePort(void *refCon)
 {
     IOReturn	ret = kIOReturnSuccess;
     
@@ -1341,22 +1341,22 @@ IOReturn AppleUSBCDCDMM::releasePort(void *refCon)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::releasePortAction
+//		Method:		SPTUSBCDCDMM::releasePortAction
 //
 //		Desc:		Dummy pass through for releasePortGated.
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::releasePortAction(OSObject *owner, void *, void *, void *, void *)
+IOReturn SPTUSBCDCDMM::releasePortAction(OSObject *owner, void *, void *, void *, void *)
 {
 
-    return ((AppleUSBCDCDMM *)owner)->releasePortGated();
+    return ((SPTUSBCDCDMM *)owner)->releasePortGated();
     
 }/* end releasePortAction */
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::releasePortGated
+//		Method:		SPTUSBCDCDMM::releasePortGated
 //
 //		Inputs:		
 //
@@ -1366,7 +1366,7 @@ IOReturn AppleUSBCDCDMM::releasePortAction(OSObject *owner, void *, void *, void
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::releasePortGated()
+IOReturn SPTUSBCDCDMM::releasePortGated()
 {
     UInt32 	busyState;
 	UInt32	state;
@@ -1406,7 +1406,7 @@ IOReturn AppleUSBCDCDMM::releasePortGated()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::getState
+//		Method:		SPTUSBCDCDMM::getState
 //
 //		Inputs:		refCon - unused
 //
@@ -1416,7 +1416,7 @@ IOReturn AppleUSBCDCDMM::releasePortGated()
 //
 /****************************************************************************************************/
 
-UInt32 AppleUSBCDCDMM::getState(void *refCon)
+UInt32 SPTUSBCDCDMM::getState(void *refCon)
 {
     UInt32	currState;
     
@@ -1438,17 +1438,17 @@ UInt32 AppleUSBCDCDMM::getState(void *refCon)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::getStateAction
+//		Method:		SPTUSBCDCDMM::getStateAction
 //
 //		Desc:		Dummy pass through for getStateGated.
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::getStateAction(OSObject *owner, void *, void *, void *, void *)
+IOReturn SPTUSBCDCDMM::getStateAction(OSObject *owner, void *, void *, void *, void *)
 {
     UInt32	newState;
 
-    newState = ((AppleUSBCDCDMM *)owner)->getStateGated();
+    newState = ((SPTUSBCDCDMM *)owner)->getStateGated();
     
     return newState;
     
@@ -1456,7 +1456,7 @@ IOReturn AppleUSBCDCDMM::getStateAction(OSObject *owner, void *, void *, void *,
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::getStateGated
+//		Method:		SPTUSBCDCDMM::getStateGated
 //
 //		Inputs:		port - unused
 //
@@ -1466,7 +1466,7 @@ IOReturn AppleUSBCDCDMM::getStateAction(OSObject *owner, void *, void *, void *,
 //
 /****************************************************************************************************/
 
-UInt32 AppleUSBCDCDMM::getStateGated()
+UInt32 SPTUSBCDCDMM::getStateGated()
 {
     UInt32 	state;
 	
@@ -1487,7 +1487,7 @@ UInt32 AppleUSBCDCDMM::getStateGated()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::setState
+//		Method:		SPTUSBCDCDMM::setState
 //
 //		Inputs:		state - the state
 //				mask - the mask
@@ -1499,7 +1499,7 @@ UInt32 AppleUSBCDCDMM::getStateGated()
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::setState(UInt32 state, UInt32 mask, void *refCon)
+IOReturn SPTUSBCDCDMM::setState(UInt32 state, UInt32 mask, void *refCon)
 {
     IOReturn	ret = kIOReturnSuccess;
     
@@ -1535,22 +1535,22 @@ IOReturn AppleUSBCDCDMM::setState(UInt32 state, UInt32 mask, void *refCon)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::setStateAction
+//		Method:		SPTUSBCDCDMM::setStateAction
 //
 //		Desc:		Dummy pass through for setStateGated.
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::setStateAction(OSObject *owner, void *arg0, void *arg1, void *, void *)
+IOReturn SPTUSBCDCDMM::setStateAction(OSObject *owner, void *arg0, void *arg1, void *, void *)
 {
 
-    return ((AppleUSBCDCDMM *)owner)->setStateGated((UInt32 *)arg0, (UInt32 *)arg1);
+    return ((SPTUSBCDCDMM *)owner)->setStateGated((UInt32 *)arg0, (UInt32 *)arg1);
     
 }/* end setStateAction */
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::setStateGated
+//		Method:		SPTUSBCDCDMM::setStateGated
 //
 //		Inputs:		state - state to set
 //				mask - state mask
@@ -1568,7 +1568,7 @@ IOReturn AppleUSBCDCDMM::setStateAction(OSObject *owner, void *arg0, void *arg1,
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::setStateGated(UInt32 *pState, UInt32 *pMask)
+IOReturn SPTUSBCDCDMM::setStateGated(UInt32 *pState, UInt32 *pMask)
 {
 	UInt32	state = *pMask;
 	UInt32	mask = *pMask;
@@ -1624,7 +1624,7 @@ IOReturn AppleUSBCDCDMM::setStateGated(UInt32 *pState, UInt32 *pMask)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::watchState
+//		Method:		SPTUSBCDCDMM::watchState
 //
 //		Inputs:		state - state to watch for
 //				mask - state mask bits
@@ -1636,7 +1636,7 @@ IOReturn AppleUSBCDCDMM::setStateGated(UInt32 *pState, UInt32 *pMask)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::watchState(UInt32 *state, UInt32 mask, void *refCon)
+IOReturn SPTUSBCDCDMM::watchState(UInt32 *state, UInt32 mask, void *refCon)
 {
     IOReturn 	ret;
 
@@ -1664,22 +1664,22 @@ IOReturn AppleUSBCDCDMM::watchState(UInt32 *state, UInt32 mask, void *refCon)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::watchStateAction
+//		Method:		SPTUSBCDCDMM::watchStateAction
 //
 //		Desc:		Dummy pass through for watchStateGated.
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::watchStateAction(OSObject *owner, void *arg0, void *arg1, void *, void *)
+IOReturn SPTUSBCDCDMM::watchStateAction(OSObject *owner, void *arg0, void *arg1, void *, void *)
 {
 
-    return ((AppleUSBCDCDMM *)owner)->watchStateGated((UInt32 *)arg0, (UInt32 *)arg1);
+    return ((SPTUSBCDCDMM *)owner)->watchStateGated((UInt32 *)arg0, (UInt32 *)arg1);
     
 }/* end watchStateAction */
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::watchStateGated
+//		Method:		SPTUSBCDCDMM::watchStateGated
 //
 //		Inputs:		state - state to watch for
 //				mask - state mask bits
@@ -1695,7 +1695,7 @@ IOReturn AppleUSBCDCDMM::watchStateAction(OSObject *owner, void *arg0, void *arg
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::watchStateGated(UInt32 *state, UInt32 *pMask)
+IOReturn SPTUSBCDCDMM::watchStateGated(UInt32 *state, UInt32 *pMask)
 {
 	UInt32		mask = *pMask;
     unsigned 	watchState, foundStates;
@@ -1799,7 +1799,7 @@ IOReturn AppleUSBCDCDMM::watchStateGated(UInt32 *state, UInt32 *pMask)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::nextEvent
+//		Method:		SPTUSBCDCDMM::nextEvent
 //
 //		Inputs:		refCon - unused
 //
@@ -1809,7 +1809,7 @@ IOReturn AppleUSBCDCDMM::watchStateGated(UInt32 *state, UInt32 *pMask)
 //
 /****************************************************************************************************/
 
-UInt32 AppleUSBCDCDMM::nextEvent(void *refCon)
+UInt32 SPTUSBCDCDMM::nextEvent(void *refCon)
 {
 
     XTRACE(this, 0, 0, "nextEvent");
@@ -1828,7 +1828,7 @@ UInt32 AppleUSBCDCDMM::nextEvent(void *refCon)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::executeEvent
+//		Method:		SPTUSBCDCDMM::executeEvent
 //
 //		Inputs:		event - The event
 //				data - any data associated with the event
@@ -1840,7 +1840,7 @@ UInt32 AppleUSBCDCDMM::nextEvent(void *refCon)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::executeEvent(UInt32 event, UInt32 data, void *refCon)
+IOReturn SPTUSBCDCDMM::executeEvent(UInt32 event, UInt32 data, void *refCon)
 {
     IOReturn 	ret;
     
@@ -1862,22 +1862,22 @@ IOReturn AppleUSBCDCDMM::executeEvent(UInt32 event, UInt32 data, void *refCon)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::executeEventAction
+//		Method:		SPTUSBCDCDMM::executeEventAction
 //
 //		Desc:		Dummy pass through for executeEventGated.
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::executeEventAction(OSObject *owner, void *arg0, void *arg1, void *, void *)
+IOReturn SPTUSBCDCDMM::executeEventAction(OSObject *owner, void *arg0, void *arg1, void *, void *)
 {
 
-    return ((AppleUSBCDCDMM *)owner)->executeEventGated((UInt32 *)arg0, (UInt32 *)arg1);
+    return ((SPTUSBCDCDMM *)owner)->executeEventGated((UInt32 *)arg0, (UInt32 *)arg1);
     
 }/* end executeEventAction */
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::executeEventGated
+//		Method:		SPTUSBCDCDMM::executeEventGated
 //
 //		Inputs:		event - The event
 //				data - any data associated with the event
@@ -1889,7 +1889,7 @@ IOReturn AppleUSBCDCDMM::executeEventAction(OSObject *owner, void *arg0, void *a
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::executeEventGated(UInt32 *pEvent, UInt32 *pData)
+IOReturn SPTUSBCDCDMM::executeEventGated(UInt32 *pEvent, UInt32 *pData)
 {
 	UInt32		event = *pEvent;
 	UInt32		data = *pData;
@@ -2091,7 +2091,7 @@ IOReturn AppleUSBCDCDMM::executeEventGated(UInt32 *pEvent, UInt32 *pData)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::requestEvent
+//		Method:		SPTUSBCDCDMM::requestEvent
 //
 //		Inputs:		event - The event
 //				refCon - unused
@@ -2106,7 +2106,7 @@ IOReturn AppleUSBCDCDMM::executeEventGated(UInt32 *pEvent, UInt32 *pData)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::requestEvent(UInt32 event, UInt32 *data, void *refCon)
+IOReturn SPTUSBCDCDMM::requestEvent(UInt32 event, UInt32 *data, void *refCon)
 {
     IOReturn	returnValue = kIOReturnSuccess;
 
@@ -2238,7 +2238,7 @@ IOReturn AppleUSBCDCDMM::requestEvent(UInt32 event, UInt32 *data, void *refCon)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::enqueueEvent
+//		Method:		SPTUSBCDCDMM::enqueueEvent
 //
 //		Inputs:		event - The event
 //				data - any data associated with the event, 
@@ -2252,7 +2252,7 @@ IOReturn AppleUSBCDCDMM::requestEvent(UInt32 event, UInt32 *data, void *refCon)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::enqueueEvent(UInt32 event, UInt32 data, bool sleep, void *refCon)
+IOReturn SPTUSBCDCDMM::enqueueEvent(UInt32 event, UInt32 data, bool sleep, void *refCon)
 {
     IOReturn 	ret;
     
@@ -2274,7 +2274,7 @@ IOReturn AppleUSBCDCDMM::enqueueEvent(UInt32 event, UInt32 data, bool sleep, voi
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::dequeueEvent
+//		Method:		SPTUSBCDCDMM::dequeueEvent
 //
 //		Inputs:		sleep - true (wait for it), false (don't)
 //				refCon - unused
@@ -2285,7 +2285,7 @@ IOReturn AppleUSBCDCDMM::enqueueEvent(UInt32 event, UInt32 data, bool sleep, voi
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::dequeueEvent(UInt32 *event, UInt32 *data, bool sleep, void *refCon)
+IOReturn SPTUSBCDCDMM::dequeueEvent(UInt32 *event, UInt32 *data, bool sleep, void *refCon)
 {
 	
     XTRACE(this, 0, 0, "dequeueEvent");
@@ -2310,7 +2310,7 @@ IOReturn AppleUSBCDCDMM::dequeueEvent(UInt32 *event, UInt32 *data, bool sleep, v
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::enqueueData
+//		Method:		SPTUSBCDCDMM::enqueueData
 //
 //		Inputs:		buffer - the data
 //				size - number of bytes
@@ -2324,7 +2324,7 @@ IOReturn AppleUSBCDCDMM::dequeueEvent(UInt32 *event, UInt32 *data, bool sleep, v
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::enqueueData(UInt8 *buffer, UInt32 size, UInt32 *count, bool sleep, void *refCon)
+IOReturn SPTUSBCDCDMM::enqueueData(UInt8 *buffer, UInt32 size, UInt32 *count, bool sleep, void *refCon)
 {
     IOReturn 	ret;
     
@@ -2349,22 +2349,22 @@ IOReturn AppleUSBCDCDMM::enqueueData(UInt8 *buffer, UInt32 size, UInt32 *count, 
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::enqueueDatatAction
+//		Method:		SPTUSBCDCDMM::enqueueDatatAction
 //
 //		Desc:		Dummy pass through for enqueueDataGated.
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::enqueueDataAction(OSObject *owner, void *arg0, void *arg1, void *arg2, void *arg3)
+IOReturn SPTUSBCDCDMM::enqueueDataAction(OSObject *owner, void *arg0, void *arg1, void *arg2, void *arg3)
 {
 
-    return ((AppleUSBCDCDMM *)owner)->enqueueDataGated((UInt8 *)arg0, (UInt32 *)arg1, (UInt32 *)arg2, (bool *)arg3);
+    return ((SPTUSBCDCDMM *)owner)->enqueueDataGated((UInt8 *)arg0, (UInt32 *)arg1, (UInt32 *)arg2, (bool *)arg3);
     
 }/* end enqueueDataAction */
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::enqueueDataGated
+//		Method:		SPTUSBCDCDMM::enqueueDataGated
 //
 //		Inputs:		buffer - the data
 //				size - number of bytes
@@ -2388,7 +2388,7 @@ IOReturn AppleUSBCDCDMM::enqueueDataAction(OSObject *owner, void *arg0, void *ar
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::enqueueDataGated(UInt8 *buffer, UInt32 *pSize, UInt32 *count, bool *pSleep)
+IOReturn SPTUSBCDCDMM::enqueueDataGated(UInt8 *buffer, UInt32 *pSize, UInt32 *count, bool *pSleep)
 {
 	UInt32		size = *pSize;
 	bool		sleep = *pSleep;
@@ -2448,7 +2448,7 @@ IOReturn AppleUSBCDCDMM::enqueueDataGated(UInt8 *buffer, UInt32 *pSize, UInt32 *
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::dequeueData
+//		Method:		SPTUSBCDCDMM::dequeueData
 //
 //		Inputs:		size - buffer size
 //				min - minimum bytes required
@@ -2462,7 +2462,7 @@ IOReturn AppleUSBCDCDMM::enqueueDataGated(UInt8 *buffer, UInt32 *pSize, UInt32 *
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::dequeueData(UInt8 *buffer, UInt32 size, UInt32 *count, UInt32 min, void *refCon)
+IOReturn SPTUSBCDCDMM::dequeueData(UInt8 *buffer, UInt32 size, UInt32 *count, UInt32 min, void *refCon)
 {
     IOReturn 	ret;
     
@@ -2487,22 +2487,22 @@ IOReturn AppleUSBCDCDMM::dequeueData(UInt8 *buffer, UInt32 size, UInt32 *count, 
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::dequeueDatatAction
+//		Method:		SPTUSBCDCDMM::dequeueDatatAction
 //
 //		Desc:		Dummy pass through for dequeueDataGated.
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::dequeueDataAction(OSObject *owner, void *arg0, void *arg1, void *arg2, void *arg3)
+IOReturn SPTUSBCDCDMM::dequeueDataAction(OSObject *owner, void *arg0, void *arg1, void *arg2, void *arg3)
 {
 
-    return ((AppleUSBCDCDMM *)owner)->dequeueDataGated((UInt8 *)arg0, (UInt32 *)arg1, (UInt32 *)arg2, (UInt32 *)arg3);
+    return ((SPTUSBCDCDMM *)owner)->dequeueDataGated((UInt8 *)arg0, (UInt32 *)arg1, (UInt32 *)arg2, (UInt32 *)arg3);
     
 }/* end dequeueDataAction */
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::dequeueDataGated
+//		Method:		SPTUSBCDCDMM::dequeueDataGated
 //
 //		Inputs:		size - buffer size
 //				min - minimum bytes required
@@ -2529,7 +2529,7 @@ IOReturn AppleUSBCDCDMM::dequeueDataAction(OSObject *owner, void *arg0, void *ar
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::dequeueDataGated(UInt8 *buffer, UInt32 *pSize, UInt32 *count, UInt32 *pMin)
+IOReturn SPTUSBCDCDMM::dequeueDataGated(UInt8 *buffer, UInt32 *pSize, UInt32 *count, UInt32 *pMin)
 {
 	UInt32		size = *pSize;
 	UInt32		min = *pMin;
@@ -2594,7 +2594,7 @@ IOReturn AppleUSBCDCDMM::dequeueDataGated(UInt8 *buffer, UInt32 *pSize, UInt32 *
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::setUpTransmit
+//		Method:		SPTUSBCDCDMM::setUpTransmit
 //
 //		Inputs:		
 //
@@ -2604,7 +2604,7 @@ IOReturn AppleUSBCDCDMM::dequeueDataGated(UInt8 *buffer, UInt32 *pSize, UInt32 *
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCDMM::setUpTransmit()
+bool SPTUSBCDCDMM::setUpTransmit()
 {
 
     XTRACE(this, 0, 0, "setUpTransmit");
@@ -2628,7 +2628,7 @@ bool AppleUSBCDCDMM::setUpTransmit()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::startTransmission
+//		Method:		SPTUSBCDCDMM::startTransmission
 //
 //		Inputs:		
 //
@@ -2639,7 +2639,7 @@ bool AppleUSBCDCDMM::setUpTransmit()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::startTransmission()
+void SPTUSBCDCDMM::startTransmission()
 {
 	UInt32		state;
 	UInt32		mask;
@@ -2687,7 +2687,7 @@ void AppleUSBCDCDMM::startTransmission()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::sendMERRequest
+//		Method:		SPTUSBCDCDMM::sendMERRequest
 //
 //		Inputs:		
 //
@@ -2697,7 +2697,7 @@ void AppleUSBCDCDMM::startTransmission()
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::sendMERRequest(UInt8 request, UInt16 val, UInt16 len, UInt8 *buff, IOUSBCompletion *Comp)
+IOReturn SPTUSBCDCDMM::sendMERRequest(UInt8 request, UInt16 val, UInt16 len, UInt8 *buff, IOUSBCompletion *Comp)
 {
 	IOUSBDevRequest	*MER;
     IOReturn		rc = kIOReturnSuccess;
@@ -2744,7 +2744,7 @@ IOReturn AppleUSBCDCDMM::sendMERRequest(UInt8 request, UInt16 val, UInt16 len, U
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::setLineCoding
+//		Method:		SPTUSBCDCDMM::setLineCoding
 //
 //		Inputs:		
 //
@@ -2754,7 +2754,7 @@ IOReturn AppleUSBCDCDMM::sendMERRequest(UInt8 request, UInt16 val, UInt16 len, U
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::setLineCoding()
+void SPTUSBCDCDMM::setLineCoding()
 {
 	IOReturn	ior;
 	LineCoding  *lineParms;
@@ -2800,7 +2800,7 @@ void AppleUSBCDCDMM::setLineCoding()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::setControlLineState
+//		Method:		SPTUSBCDCDMM::setControlLineState
 //
 //		Inputs:		RTS - true(set RTS), false(clear RTS)
 //				DTR - true(set DTR), false(clear DTR)
@@ -2811,7 +2811,7 @@ void AppleUSBCDCDMM::setLineCoding()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::setControlLineState(bool RTS, bool DTR)
+void SPTUSBCDCDMM::setControlLineState(bool RTS, bool DTR)
 {
 	IOReturn	ior;
     UInt16		CSBitmap = 0;
@@ -2837,7 +2837,7 @@ void AppleUSBCDCDMM::setControlLineState(bool RTS, bool DTR)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::sendBreak
+//		Method:		SPTUSBCDCDMM::sendBreak
 //
 //		Inputs:		sBreak - true(set Break), false(clear Break)
 //
@@ -2847,7 +2847,7 @@ void AppleUSBCDCDMM::setControlLineState(bool RTS, bool DTR)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::sendBreak(bool sBreak)
+void SPTUSBCDCDMM::sendBreak(bool sBreak)
 {
 	IOReturn	ior;
     UInt16		breakVal = 0;
@@ -2873,7 +2873,7 @@ void AppleUSBCDCDMM::sendBreak(bool sBreak)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::initStructure
+//		Method:		SPTUSBCDCDMM::initStructure
 //
 //		Inputs:		
 //
@@ -2883,7 +2883,7 @@ void AppleUSBCDCDMM::sendBreak(bool sBreak)
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::initStructure()
+void SPTUSBCDCDMM::initStructure()
 {
 	
     XTRACE(this, 0, 0, "initStructure");
@@ -2900,7 +2900,7 @@ void AppleUSBCDCDMM::initStructure()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::setStructureDefaults
+//		Method:		SPTUSBCDCDMM::setStructureDefaults
 //
 //		Inputs:		
 //
@@ -2910,7 +2910,7 @@ void AppleUSBCDCDMM::initStructure()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::setStructureDefaults()
+void SPTUSBCDCDMM::setStructureDefaults()
 {
     UInt32	tmp;
 	
@@ -2949,7 +2949,7 @@ void AppleUSBCDCDMM::setStructureDefaults()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::allocateResources
+//		Method:		SPTUSBCDCDMM::allocateResources
 //
 //		Inputs:		
 //
@@ -2959,7 +2959,7 @@ void AppleUSBCDCDMM::setStructureDefaults()
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCDMM::allocateResources()
+bool SPTUSBCDCDMM::allocateResources()
 {
     IOUSBFindEndpointRequest	epReq;
 	IOReturn					rtn;
@@ -3066,7 +3066,7 @@ bool AppleUSBCDCDMM::allocateResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::releaseResources
+//		Method:		SPTUSBCDCDMM::releaseResources
 //
 //		Inputs:		
 //
@@ -3076,7 +3076,7 @@ bool AppleUSBCDCDMM::allocateResources()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::releaseResources()
+void SPTUSBCDCDMM::releaseResources()
 {
     
     XTRACE(this, 0, 0, "releaseResources");
@@ -3120,7 +3120,7 @@ void AppleUSBCDCDMM::releaseResources()
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::freeRingBuffer
+//		Method:		SPTUSBCDCDMM::freeRingBuffer
 //
 //		Inputs:		Queue - the specified queue to free
 //
@@ -3131,7 +3131,7 @@ void AppleUSBCDCDMM::releaseResources()
 //
 /****************************************************************************************************/
 
-void AppleUSBCDCDMM::freeRingBuffer(CirQueue *Queue)
+void SPTUSBCDCDMM::freeRingBuffer(CirQueue *Queue)
 {
     XTRACEP(this, 0, Queue, "freeRingBuffer");
 
@@ -3148,7 +3148,7 @@ void AppleUSBCDCDMM::freeRingBuffer(CirQueue *Queue)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::allocateRingBuffer
+//		Method:		SPTUSBCDCDMM::allocateRingBuffer
 //
 //		Inputs:		Queue - the specified queue to allocate
 //				BufferSize - size to allocate
@@ -3159,7 +3159,7 @@ void AppleUSBCDCDMM::freeRingBuffer(CirQueue *Queue)
 //
 /****************************************************************************************************/
 
-bool AppleUSBCDCDMM::allocateRingBuffer(CirQueue *Queue, size_t BufferSize)
+bool SPTUSBCDCDMM::allocateRingBuffer(CirQueue *Queue, size_t BufferSize)
 {
     UInt8	*Buffer;
 
@@ -3179,7 +3179,7 @@ bool AppleUSBCDCDMM::allocateRingBuffer(CirQueue *Queue, size_t BufferSize)
 
 /****************************************************************************************************/
 //
-//		Method:		AppleUSBCDCDMM::message
+//		Method:		SPTUSBCDCDMM::message
 //
 //		Inputs:		type - message type
 //				provider - my provider
@@ -3191,7 +3191,7 @@ bool AppleUSBCDCDMM::allocateRingBuffer(CirQueue *Queue, size_t BufferSize)
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCDMM::message(UInt32 type, IOService *provider, void *argument)
+IOReturn SPTUSBCDCDMM::message(UInt32 type, IOService *provider, void *argument)
 {
 	IOReturn	rtn;
     

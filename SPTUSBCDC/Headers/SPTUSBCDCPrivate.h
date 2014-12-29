@@ -36,10 +36,10 @@
 
 #if LDEBUG
     #if USE_ELG
-		#define XTRACE(ID,A,B,STRING) {Log("%8p %8x %8x AppleUSBCDC: " STRING "\n",(void *)(ID),(unsigned int)(A),(unsigned int)(B));}
+		#define XTRACE(ID,A,B,STRING) {Log("%8p %8x %8x SPTUSBCDC: " STRING "\n",(void *)(ID),(unsigned int)(A),(unsigned int)(B));}
     #else /* not USE_ELG */
         #if USE_IOL
-            #define XTRACE(ID,A,B,STRING) {Log("%8p %8x %8x AppleUSBCDC: " STRING "\n",(void *)(ID),(unsigned int)(A),(unsigned int)(B)); IOSleep(Sleep_Time);}
+            #define XTRACE(ID,A,B,STRING) {Log("%8p %8x %8x SPTUSBCDC: " STRING "\n",(void *)(ID),(unsigned int)(A),(unsigned int)(B)); IOSleep(Sleep_Time);}
         #else
             #define XTRACE(id, x, y, msg)
         #endif /* USE_IOL */
@@ -50,4 +50,4 @@
     #undef USE_IOL
 #endif /* LDEBUG */
 
-#define ALERT(A,B,STRING)	Log("%8x %8x AppleUSBCDC: " STRING "\n", (unsigned int)(A), (unsigned int)(B))
+#define ALERT(A,B,STRING)	Log("%8x %8x SPTUSBCDC: " STRING "\n", (unsigned int)(A), (unsigned int)(B))

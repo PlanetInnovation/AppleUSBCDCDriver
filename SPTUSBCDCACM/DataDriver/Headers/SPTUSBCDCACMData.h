@@ -27,10 +27,10 @@
 
 #include <IOKit/IOUserClient.h>
 
-#include "AppleUSBCDCCommon.h"
-#include "AppleUSBCDC.h"
-#include "AppleUSBCDCACMControl.h"
-#include "AppleUSBCDCACMDataUser.h"
+#include "SPTUSBCDCCommon.h"
+#include "SPTUSBCDC.h"
+#include "SPTUSBCDCACMControl.h"
+#include "SPTUSBCDCACMDataUser.h"
 
 #define baseName		"usbmodem"
 #define hiddenTag		"HiddenPort"
@@ -209,19 +209,19 @@ typedef struct
 
 } PortInfo_t;
 
-class AppleUSBCDC;
-class AppleUSBCDCACMControl;
+class SPTUSBCDC;
+class SPTUSBCDCACMControl;
 
-	/* AppleUSBCDCACMData.h - This file contains the class definition for the		*/
+	/* SPTUSBCDCACMData.h - This file contains the class definition for the		*/
 	/* USB Communication Device Class (CDC) Data Interface driver - ACM only at the moment.	*/
 
-class AppleUSBCDCACMData : public IOSerialDriverSync
+class SPTUSBCDCACMData : public IOSerialDriverSync
 {
-    OSDeclareDefaultStructors(AppleUSBCDCACMData);			// Constructor & Destructor stuff
+    OSDeclareDefaultStructors(SPTUSBCDCACMData);			// Constructor & Destructor stuff
 
 private:
-	AppleUSBCDC		*fCDCDriver;			// The CDC driver
-	AppleUSBCDCACMControl   *fControlDriver;			// Our Control Driver
+	SPTUSBCDC		*fCDCDriver;			// The CDC driver
+	SPTUSBCDCACMControl   *fControlDriver;			// Our Control Driver
     UInt16			fSessions;				// Number of active sessions
     bool			fStopping;				// Are we being "stopped"
     UInt8			fProductName[productNameLength];	// Product String from the Device
@@ -291,7 +291,7 @@ public:
         // Static stubs for IOCommandGate::runAction
         
 	static IOReturn			waitForBSDClienAction(OSObject *owner, void *, void *, void *, void *);
-    static bool				bsdClientPublished(AppleUSBCDCACMData *target, void *ref, IOService *newService,IONotifier * notifier);
+    static bool				bsdClientPublished(SPTUSBCDCACMData *target, void *ref, IOService *newService,IONotifier * notifier);
     static	IOReturn	stopAction(OSObject *owner, void *, void *, void *, void *);
     static	IOReturn	acquirePortAction(OSObject *owner, void *arg0, void *, void *, void *);
     static	IOReturn	releasePortAction(OSObject *owner, void *, void *, void *, void *);
@@ -359,16 +359,16 @@ private:
     void 			CheckQueues(void);
 	void			CheckHold(void);
     
-}; /* end class AppleUSBCDCACMData */
+}; /* end class SPTUSBCDCACMData */
 
-class AppleUSBCDCACMData;
+class SPTUSBCDCACMData;
 
-class AppleUSBCDCACMDataUserClient : public IOUserClient
+class SPTUSBCDCACMDataUserClient : public IOUserClient
 {
-    OSDeclareDefaultStructors(AppleUSBCDCACMDataUserClient);
+    OSDeclareDefaultStructors(SPTUSBCDCACMDataUserClient);
 
 private:
-    AppleUSBCDCACMData	*fProvider;
+    SPTUSBCDCACMData	*fProvider;
     IOExternalMethod	fMethods[1];		// just one method
     task_t		fTask;
 
@@ -385,5 +385,5 @@ private:
     IOReturn		ACMDataClose(void *pIn, void *pOut, IOByteCount inputSize, IOByteCount *pOutPutSize);
     IOReturn		ACMDataMessage(void *pIn, void *pOut, IOByteCount inputSize, IOByteCount *pOutPutSize);
     
-}; /* end class AppleUSBCDCACMDataUserClient */
+}; /* end class SPTUSBCDCACMDataUserClient */
 #endif

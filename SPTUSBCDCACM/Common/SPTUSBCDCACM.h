@@ -25,7 +25,7 @@
 #ifndef __APPLEUSBCDCACM__
 #define __APPLEUSBCDCACM__
 
-#include "AppleUSBCDCCommon.h"
+#include "SPTUSBCDCCommon.h"
 
     // Common Defintions
 
