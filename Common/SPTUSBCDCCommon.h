@@ -501,7 +501,7 @@ extern "C"
 #include <sys/systm.h>
 #include <sys/malloc.h>
 #include <sys/syslog.h>
-#include <sys/fslog.h>
+//#include <sys/fslog.h>
 #include <IOKit/IOLib.h>
     extern void cdc_LogToMessageTracer(const char *domain, const char *signature, const char *signature2, const char *signature3, u_int64_t optValue, int optSucceeded);
     

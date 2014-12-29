@@ -1580,7 +1580,31 @@ IOReturn SPTUSBCDCACMData::waitForBSDClienAction(OSObject *owner, void *, void *
 //
 /****************************************************************************************************/
 
-IOReturn AppleUSBCDCACMData::waitForBSDClientGated()
+/* Missing defines sourced from http://lists.apple.com/archives/xcode-users/2005/Jun/msg01060.html */
+#define AbsoluteTime_to_scalar(x)    (*(uint64_t *)(x))
+
+#define CMP_ABSOLUTETIME(t1, t2)                \
+(AbsoluteTime_to_scalar(t1) >                \
+AbsoluteTime_to_scalar(t2)? (int)+1 :    \
+(AbsoluteTime_to_scalar(t1) <                \
+AbsoluteTime_to_scalar(t2)? (int)-1 : 0))
+
+/* t1 += t2 */
+#define ADD_ABSOLUTETIME(t1, t2)                \
+(AbsoluteTime_to_scalar(t1) +=                \
+AbsoluteTime_to_scalar(t2))
+
+/* t1 -= t2 */
+#define SUB_ABSOLUTETIME(t1, t2)                \
+(AbsoluteTime_to_scalar(t1) -=                \
+AbsoluteTime_to_scalar(t2))
+
+#define ADD_ABSOLUTETIME_TICKS(t1, ticks)        \
+(AbsoluteTime_to_scalar(t1) +=                \
+(int32_t)(ticks))
+
+
+IOReturn SPTUSBCDCACMData::waitForBSDClientGated()
 {
     IOReturn	result = kIOReturnSuccess;
 	
