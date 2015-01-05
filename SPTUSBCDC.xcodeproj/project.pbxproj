@@ -1123,8 +1123,8 @@
 		842DF45916A60E9C005BD008 /* Development-Embedded */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = "";
 			};
 			name = "Development-Embedded";
@@ -1404,9 +1404,9 @@
 		842DF46516A60EAB005BD008 /* Deployment-Embedded */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COPY_PHASE_STRIP = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = "";
 			};
 			name = "Deployment-Embedded";
@@ -2404,9 +2404,9 @@
 		973C88030897FD9100B1007D /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = "";
 			};
 			name = Development;
@@ -2414,10 +2414,10 @@
 		973C88040897FD9100B1007D /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = "";
 			};
 			name = Deployment;
@@ -2425,10 +2425,10 @@
 		973C88050897FD9100B1007D /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = "";
 			};
 			name = Default;
