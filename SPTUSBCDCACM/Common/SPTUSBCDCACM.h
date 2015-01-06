@@ -44,14 +44,16 @@
 #define Log	kprintf
 #endif
 
+const unsigned int kSleepTime = 20;
+
 #if LDEBUG
     #if USE_ELG
         #define XTRACE(ID,A,B,STRING) {Log("%8x %8x %8x " DEBUG_NAME ": " STRING "\n",(uintptr_t)(ID),(unsigned int)(A),(unsigned int)(B));}
         #define XTRACEP(ID,A,B,STRING) {Log("%8x %p %p " DEBUG_NAME ": " STRING "\n",(uintptr_t)(ID),(void *)(A),(void *)(B));}
 #else /* not USE_ELG */
     #if USE_IOL
-        #define XTRACE(ID,A,B,STRING) {Log("%8x %8x %8x " DEBUG_NAME ": " STRING "\n",(unsigned int)(ID),(unsigned int)(A),(unsigned int)(B)); IOSleep(kSleepTime);}
-        #define XTRACEP(ID,A,B,STRING) {Log("%8x %p %p " DEBUG_NAME ": " STRING "\n",(unsigned int)(ID),(void *)(A),(void *)(B)); IOSleep(kSleepTime);}
+        #define XTRACE(ID,A,B,STRING) {Log("%l %8x %8x " DEBUG_NAME ": " STRING "\n",(unsigned long)(ID),(unsigned int)(A),(unsigned int)(B)); IOSleep(kSleepTime);}
+        #define XTRACEP(ID,A,B,STRING) {Log("%l %p %p " DEBUG_NAME ": " STRING "\n",(unsigned long)(ID),(void *)(A),(void *)(B)); IOSleep(kSleepTime);}
 #else
     #if USE_XTRACE
         #include <XTrace/XTrace.h>
