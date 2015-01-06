@@ -43,14 +43,9 @@
 			<key>IOClass</key>
 			<string>SPTUSBCDC</string>
 			<key>IOProbeScore</key>
-			<integer>10000</integer>
+			<integer>0</integer>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>IOProviderMergeProperties</key>
-			<dict>
-				<key>kDoNotClassMatchThisInterface</key>
-				<true/>
-			</dict>
 		</dict>
 	</dict>
 	<key>OSBundleLibraries</key>
