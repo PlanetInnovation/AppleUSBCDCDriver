@@ -45,57 +45,6 @@
 			<key>OutputBuffers</key>
 			<integer>16</integer>
 		</dict>
-		<key>SPTUSBCDCACMData1</key>
-		<dict>
-			<key>bInterfaceClass</key>
-			<integer>10</integer>
-			<key>bInterfaceSubClass</key>
-			<integer>2</integer>
-			<key>CFBundleIdentifier</key>
-			<string>com.spt.driver.SPTUSBCDCACMData</string>
-			<key>InputBuffers</key>
-			<integer>8</integer>
-			<key>IOClass</key>
-			<string>SPTUSBCDCACMData</string>
-			<key>IOProviderClass</key>
-			<string>IOUSBInterface</string>
-			<key>IOUserClientClass</key>
-			<string>SPTUSBCDCACMDataUserClient</string>
-			<key>OutputBuffers</key>
-			<integer>16</integer>
-		</dict>
-		<key>SPTUSBCDCACMData2</key>
-		<dict>
-			<key>bInterfaceClass</key>
-			<integer>10</integer>
-			<key>bInterfaceSubClass</key>
-			<integer>255</integer>
-			<key>CFBundleIdentifier</key>
-			<string>com.spt.driver.SPTUSBCDCACMData</string>
-			<key>InputBuffers</key>
-			<integer>8</integer>
-			<key>IOClass</key>
-			<string>SPTUSBCDCACMData</string>
-			<key>IOProviderClass</key>
-			<string>IOUSBInterface</string>
-			<key>IOUserClientClass</key>
-			<string>SPTUSBCDCACMDataUserClient</string>
-			<key>OutputBuffers</key>
-			<integer>16</integer>
-		</dict>
-		<key>SPT</key>
-		<dict>
-			<key>CFBundleIdentifier</key>
-			<string>com.apple.driver.AppleUSBMergeNub</string>
-			<key>idProduct</key>
-			<integer>13097</integer>
-			<key>idVendor</key>
-			<integer>3725</integer>
-			<key>IOClass</key>
-			<string>AppleUSBMergeNub</string>
-			<key>IOProviderClass</key>
-			<string>IOUSBInterface</string>
-		</dict>
 	</dict>
 	<key>OSBundleLibraries</key>
 	<dict>
