@@ -32,11 +32,11 @@
 #include "SPTUSBCDCACMControl.h"
 #include "SPTUSBCDCACMDataUser.h"
 
-#define baseName		"usbmodem"
+#define baseName		"SPT-GPS"
 #define hiddenTag		"HiddenPort"
 #define WWANTag			"WWAN"
 
-#define defaultName		"USB Modem"
+#define defaultName		"SPT GPS"
 #define productNameLength	32						// Arbitrary length
 #define propertyTag		"Product Name"
 

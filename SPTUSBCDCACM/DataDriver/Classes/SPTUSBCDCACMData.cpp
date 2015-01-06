@@ -1482,9 +1482,10 @@ bool SPTUSBCDCACMData::createSuffix(unsigned char *sufKey)
         {
             if ((strlen((char *)&serBuf) < 9) && (strlen((char *)&serBuf) > 0))
             {
-				strlcpy((char *)sufKey, (const char *)&serBuf, strlen((char *)&serBuf));
+				sufKey[0] = '-';
+                strlcpy((char *)sufKey+1, (const char *)&serBuf, strlen((char *)&serBuf));
 //                strcpy((char *)sufKey, (const char *)&serBuf);
-                sig = strlen((char *)sufKey);
+                sig = strlen((char *)sufKey)+1;
                 keyOK = true;
             }			
         } else {
@@ -1500,7 +1501,7 @@ bool SPTUSBCDCACMData::createSuffix(unsigned char *sufKey)
         if (location)
         {
             locVal = location->unsigned32BitValue();
-			snprintf((char *)sufKey, (sizeof(locVal)*2)+1, "%x", (unsigned int)locVal);
+			snprintf((char *)sufKey, (sizeof(locVal)*2)+1, "-%x", (unsigned int)locVal);
 			sig = strlen((const char *)sufKey)-1;
 			for (i=sig; i>=0; i--)
 			{
