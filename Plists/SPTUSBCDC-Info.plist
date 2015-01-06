@@ -26,25 +26,7 @@
 	<string>4.2.1b5</string>
 	<key>IOKitPersonalities</key>
 	<dict>
-		<!-- <key>AlcatelECMPreferred</key>
-		<dict>
-			<key>CFBundleIdentifier</key>
-			<string>com.apple.driver.AppleUSBMergeNub</string>
-			<key>idProduct</key>
-			<integer>16482</integer>
-			<key>idVendor</key>
-			<integer>1721</integer>
-			<key>IOClass</key>
-			<string>AppleUSBMergeNub</string>
-			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
-			<key>IOProviderMergeProperties</key>
-			<dict>
-				<key>Preferred Configuration</key>
-				<integer>2</integer>
-			</dict>
-		</dict> -->
-<!-- 		<key>SPTUSBCDCDevice200</key>
+		<key>SPTUSBCDCDevice200</key>
 		<dict>
 			<key>bDeviceClass</key>
 			<integer>2</integer>
@@ -94,7 +76,7 @@
 			<integer>10000</integer>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-		</dict> -->
+		</dict>
 		<key>SPTUSBCDCDeviceACM</key>
 		<dict>
 			<key>bDeviceClass</key>
@@ -111,12 +93,8 @@
 			<integer>10000</integer>
 			<key>IOProviderClass</key>
 			<string>IOUSBDevice</string>
-			<key>idProduct</key>
-			<integer>13097</integer>
-			<key>idVendor</key>
-			<integer>3725</integer>
 		</dict>
-<!-- 		<key>SPTUSBCDCDeviceDMM</key>
+		<key>SPTUSBCDCDeviceDMM</key>
 		<dict>
 			<key>bDeviceClass</key>
 			<integer>2</integer>
@@ -553,7 +531,25 @@
 				<key>kCDCDoNotMatchThisDevice</key>
 				<true/>
 			</dict>
-		</dict> -->
+		</dict>
+		<key>SPT</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleUSBMergeNub</string>
+			<key>idProduct</key>
+			<integer>13097</integer>
+			<key>idVendor</key>
+			<integer>3725</integer>
+			<key>IOClass</key>
+			<string>AppleUSBMergeNub</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBInterface</string>
+			<key>IOProviderMergeProperties</key>
+			<dict>
+				<key>kDoNotClassMatchThisInterface</key>
+				<false/>
+			</dict>
+		</dict>
 	</dict>
 	<key>OSBundleLibraries</key>
 	<dict>
