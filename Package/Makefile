@@ -1,7 +1,7 @@
 ###########################################################################
 # \file: 
 # 
-# \brief: Makefile to build SPT GPS Driver for OSX 10.10
+# \brief: Makefile to build PI GPS Driver for OSX 10.10
 # 
 # Copyright (c) 2015, Planet Innovation
 # 436 Elgar Road, Box Hill VIC 3128 Australia
@@ -27,9 +27,9 @@ cwd  := $(shell pwd)
 #PM := "${PPATH}/Contents/MacOS/PackageMaker"
 
 # grab the long version number out of my prefix file
-version  := $(word 3, $(shell grep VersionNumber ../Common/SPTUSBCDCCommon.h))
+version  := $(word 3, $(shell grep VersionNumber ../Common/PIUSBGPSCommon.h))
 
-NAME := SPTUSBCDCDriver-${version}
+NAME := PIUSBGPSDriver-${version}
 PKG  := ../build/${NAME}.pkg
 TMP  := /tmp/cdc.root/
 #DMG  := ../build/${NAME}.dmg
@@ -42,7 +42,7 @@ clean:
 	sudo rm -rf ${TMP}
 
 #${PKG}:
-#	${PM} --doc SPTUSBCDCDriver.pmdoc --out "${PKG}"
+#	${PM} --doc PIUSBGPSDriver.pmdoc --out "${PKG}"
 
 #${DMG}:	${PKG}
 #	rm -f ${DMG}
@@ -50,6 +50,6 @@ clean:
 
 ${PKG}:
 	(cd .. ; sudo xcodebuild ARCHS="${ARCHS}" install DSTROOT="${TMP}" )
-	sudo pkgbuild --root=${TMP} --identifier com.apple.iokit.SPTUSBCDCDriver --version ${version} ${PKG}
+	sudo pkgbuild --root=${TMP} --identifier com.apple.iokit.PIUSBGPSDriver --version ${version} ${PKG}
 	(cd ${TMP} ; sudo tar cvzf ${TARBALL} .)
 	ls -ltr ../build

@@ -1,7 +1,7 @@
 ###########################################################################
 # \file: 
 # 
-# \brief: Makefile to build SPT GPS Driver for OSX 10.10
+# \brief: Makefile to build PI GPS Driver for OSX 10.10
 # 
 # Copyright (c) 2015, Planet Innovation
 # 436 Elgar Road, Box Hill VIC 3128 Australia
@@ -43,20 +43,20 @@ clean:
 	sudo rm -rf build DerivedData
 
 check:
-	ls -ld /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDC.kext
-	ls -ld /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDCACMControl.kext
-	ls -ld /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDCACMData.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDC.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDCACMControl.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDCACMData.kext
+	ls -ld /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPS.kext
+	ls -ld /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMControl.kext
+	ls -ld /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMData.kext
+	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPS.kext
+	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMControl.kext
+	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMData.kext
 	
 
 uninstall:
-	sudo rm -rf -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDC.kext
-	sudo rm -rf -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDC.old
+	sudo rm -rf -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPS.kext
+	sudo rm -rf -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPS.old
 
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDCACMControl.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDCACMControl.old
+	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMControl.kext
+	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMControl.old
 
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDCACMData.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/SPTUSBCDCACMData.old
+	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMData.kext
+	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMData.old

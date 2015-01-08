@@ -1,2 +1,5 @@
 build/
-SPTUSBCDC.xcodeproj/project.xcworkspace/xcuserdata/
+PIUSBGPS.xcodeproj/project.xcworkspace/xcuserdata/
+PIUSBCDC.xcodeproj/xcuserdata/
+*.DS_Store
+PIUSBGPS.xcodeproj/xcuserdata/

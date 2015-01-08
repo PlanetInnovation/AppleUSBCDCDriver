@@ -1,6 +1,6 @@
 /**
  \file MsgTrace.c
- \brief SPT GPS Driver for OSX 10.10
+ \brief PI GPS Driver for OSX 10.10
 
     Copyright (c) 2015, Planet Innovation
     436 Elgar Road, Box Hill VIC 3128 Australia
