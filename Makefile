@@ -32,7 +32,6 @@ install:
 	make clean
 	xcodebuild ARCHS="${ARCHS}"
 	sudo xcodebuild ARCHS="${ARCHS}" install DSTROOT="${DSTROOT}"
-	sudo touch /System/Library/Extensions
 	sync
 
 pkg:
@@ -43,20 +42,20 @@ clean:
 	sudo rm -rf build DerivedData
 
 check:
-	ls -ld /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPS.kext
-	ls -ld /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMControl.kext
-	ls -ld /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMData.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPS.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMControl.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMData.kext
+	ls -ld /Library/Extensions/PIUSBGPS.kext
+	ls -ld /Library/Extensions/PIUSBGPSACMControl.kext
+	ls -ld /Library/Extensions/PIUSBGPSACMData.kext
+	sudo kextutil -k /mach_kernel -nt /Library/Extensions/PIUSBGPS.kext
+	sudo kextutil -k /mach_kernel -nt /Library/Extensions/PIUSBGPSACMControl.kext
+	sudo kextutil -k /mach_kernel -nt /Library/Extensions/PIUSBGPSACMData.kext
 	
 
 uninstall:
-	sudo rm -rf -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPS.kext
-	sudo rm -rf -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPS.old
+	sudo rm -rf -k /mach_kernel -nt /Library/Extensions/PIUSBGPS.kext
+	sudo rm -rf -k /mach_kernel -nt /Library/Extensions/PIUSBGPS.old
 
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMControl.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMControl.old
+	sudo kextutil -k /mach_kernel -nt /Library/Extensions/PIUSBGPSACMControl.kext
+	sudo kextutil -k /mach_kernel -nt /Library/Extensions/PIUSBGPSACMControl.old
 
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMData.kext
-	sudo kextutil -k /mach_kernel -nt /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/PIUSBGPSACMData.old
+	sudo kextutil -k /mach_kernel -nt /Library/Extensions/PIUSBGPSACMData.kext
+	sudo kextutil -k /mach_kernel -nt /Library/Extensions/PIUSBGPSACMData.old

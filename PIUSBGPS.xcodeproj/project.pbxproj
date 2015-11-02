@@ -322,7 +322,7 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0640;
 			};
 			buildConfigurationList = 973C88020897FD9100B1007D /* Build configuration list for PBXProject "PIUSBGPS" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -510,12 +510,12 @@
 		842DF45A16A60E9C005BD008 /* Development-Embedded */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -539,8 +539,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "a-w,u+w, a+rX";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				MODULE_IOKIT = YES;
@@ -570,8 +570,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -602,8 +602,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -634,9 +634,9 @@
 		842DF46616A60EAB005BD008 /* Deployment-Embedded */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COPY_PHASE_STRIP = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -657,8 +657,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "a-w,u+w, a+rX";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				MODULE_IOKIT = YES;
@@ -685,8 +685,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -714,8 +714,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -745,8 +745,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "a-w,u+w, a+rX";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				MODULE_IOKIT = YES;
@@ -772,8 +772,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "a-w,u+w, a+rX";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				MODULE_IOKIT = YES;
@@ -798,8 +798,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "a-w,u+w, a+rX";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				MODULE_IOKIT = YES;
@@ -828,8 +828,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -857,8 +857,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -885,8 +885,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -916,8 +916,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -945,8 +945,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -974,8 +974,8 @@
 				INSTALL_GROUP = wheel;
 				INSTALL_MODE = "\"a-w, u+w, a+rX\"";
 				INSTALL_OWNER = root;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/Contents/PlugIns";
-				"INSTALL_PATH[sdk=iphoneos*]" = "$(SYSTEM_LIBRARY_DIR)/Extensions/IOUSBFamily.kext/PlugIns";
+				INSTALL_PATH = /Library/Extensions;
+				"INSTALL_PATH[sdk=iphoneos*]" = /Library/Extensions;
 				KERNEL_EXTENSION = YES;
 				KERNEL_MODULE = YES;
 				LIBRARY_SEARCH_PATHS = "";
@@ -995,12 +995,12 @@
 		973C87FF0897FD9100B1007D /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1015,9 +1015,9 @@
 		973C88000897FD9100B1007D /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COPY_PHASE_STRIP = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1032,8 +1032,8 @@
 		973C88010897FD9100B1007D /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = Dummy;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
