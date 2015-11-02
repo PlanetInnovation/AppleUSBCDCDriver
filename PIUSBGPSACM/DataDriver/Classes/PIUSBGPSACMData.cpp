@@ -2736,7 +2736,7 @@ IOReturn PIUSBGPSACMData::executeEventAction(OSObject *owner, void *arg0, void *
 IOReturn PIUSBGPSACMData::executeEventGated(UInt32 *pEvent, UInt32 *pData)
 {
 	UInt32		event = *pEvent;
-	UInt32		data = *pData;
+	SInt32		data = *pData;
     IOReturn	ret = kIOReturnSuccess;
     UInt32		state, delta;
 	UInt32		nState;
