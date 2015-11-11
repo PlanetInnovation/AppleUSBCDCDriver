@@ -58,7 +58,7 @@ private:
 
 public:
 
-    IOUSBDevice			*fpDevice;
+    IOUSBHostDevice			*fpDevice;
     UInt8			fbmAttributes;
     UInt8			fCacheEaddr[6];
 	UInt8			fDevClass;
@@ -85,16 +85,16 @@ public:
         // CDC Driver Methods
 	
     UInt8			Asciihex_to_binary(char c);
-    virtual IOUSBDevice		*getCDCDevice(void);
-	bool			checkDevice(IOUSBDevice *theDevice);
+    virtual IOUSBHostDevice		*getCDCDevice(void);
+	bool			checkDevice(IOUSBHostDevice *theDevice);
     bool			initDevice(UInt8 numConfigs);
 	virtual IOReturn		reInitDevice(void);
-    bool			checkACM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
-    bool			checkECM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
-    bool			checkWMC(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
-    bool			checkDMM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
-	bool			checkMBIM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
+    bool			checkACM(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
+    bool			checkECM(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
+    bool			checkWMC(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
+    bool			checkDMM(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
+	bool			checkMBIM(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum);
     virtual bool	confirmDriver(UInt8 subClass, UInt8 dataInterface);
-	virtual bool	confirmControl(UInt8 subClass, IOUSBInterface *CInterface);
+	virtual bool	confirmControl(UInt8 subClass, IOUSBHostInterface *CInterface);
 
 }; /* end class  */

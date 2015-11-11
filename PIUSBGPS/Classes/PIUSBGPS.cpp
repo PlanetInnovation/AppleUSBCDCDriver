@@ -38,16 +38,16 @@
 
 #include <IOKit/pwr_mgt/RootDomain.h>
 
-#if !TARGET_OS_IPHONE
-#include <IOKit/usb/IOUSBBus.h>
-#endif /* TARGET_OS_IPHONE */
+//#if !TARGET_OS_IPHONE
+//#include <IOKit/usb/IOUSBBus.h>
+//#endif /* TARGET_OS_IPHONE */
 
-#include <IOKit/usb/IOUSBNub.h>
-#include <IOKit/usb/IOUSBDevice.h>
+//#include <IOKit/usb/IOUSBNub.h>
+#include <IOKit/usb/IOUSBHostDevice.h>
+#include <IOKit/usb/IOUSBHostInterface.h>
 #include <IOKit/usb/IOUSBLog.h>
-#include <IOKit/usb/IOUSBPipe.h>
+//#include <IOKit/usb/IOUSBPipe.h>
 #include <IOKit/usb/USB.h>
-#include <IOKit/usb/IOUSBInterface.h>
 
 #include <IOKit/serial/IOSerialKeys.h>
 #include <IOKit/serial/IOSerialDriverSync.h>
@@ -117,7 +117,7 @@ UInt8 PIUSBGPS::Asciihex_to_binary(char c)
 
 IOService *PIUSBGPS::probe(IOService *provider, SInt32 *score)
 {
-	IOUSBDevice *newDevice = NULL;
+	IOUSBHostDevice *newDevice = NULL;
 	UInt8		classValue = 0;
     OSNumber	*classInfo = NULL;
 	SInt32		newScore = 0;
@@ -151,7 +151,7 @@ IOService *PIUSBGPS::probe(IOService *provider, SInt32 *score)
         classValue = classInfo->unsigned32BitValue();
 		if ((classValue == kUSBCompositeClass) || (classValue == kUSBMiscellaneousClass))
 		{
-			newDevice = OSDynamicCast(IOUSBDevice, provider);
+			newDevice = OSDynamicCast(IOUSBHostDevice, provider);
 			if(!newDevice)
 			{
 				XTRACE(this, 0, 0, "probe - provider invalid");
@@ -213,7 +213,7 @@ bool PIUSBGPS::start(IOService *provider)
 
 		// Get my USB device provider - the device
 
-    fpDevice = OSDynamicCast(IOUSBDevice, provider);
+    fpDevice = OSDynamicCast(IOUSBHostDevice, provider);
     if(!fpDevice)
     {
         ALERT(0, 0, "start - provider invalid");
@@ -287,7 +287,8 @@ bool PIUSBGPS::start(IOService *provider)
 
 		// Let's see if we have any configurations to play with
 		
-    configs = fpDevice->GetNumConfigurations();
+//    configs = fpDevice->GetNumConfigurations();
+    configs = fpDevice->getDeviceDescriptor()->bNumConfigurations;
     if (configs < 1)
     {
         ALERT(0, 0, "start - no configurations");
@@ -388,7 +389,7 @@ void PIUSBGPS::stop(IOService *provider)
 //
 /****************************************************************************************************/
 
-IOUSBDevice *PIUSBGPS::getCDCDevice()
+IOUSBHostDevice *PIUSBGPS::getCDCDevice()
 {
 
     XTRACE(this, 0, 0, "getCDCDevice");
@@ -409,11 +410,12 @@ IOUSBDevice *PIUSBGPS::getCDCDevice()
 //
 /****************************************************************************************************/
 
-bool PIUSBGPS::checkDevice(IOUSBDevice *theDevice)
+bool PIUSBGPS::checkDevice(IOUSBHostDevice *theDevice)
 {
     IOUSBFindInterfaceRequest	req;
 	UInt8				numConfigs;						// number of device configurations
-    const IOUSBConfigurationDescriptor	*cd = NULL;		// configuration descriptor
+//    const IOUSBConfigurationDescriptor	*cd = NULL;		// configuration descriptor
+    const StandardUSB::ConfigurationDescriptor	*cd = NULL;		// configuration descriptor
     IOUSBInterfaceDescriptor 		*intf = NULL;		// interface descriptor
     IOReturn			ior = kIOReturnSuccess;
     UInt8				cval;
@@ -423,7 +425,8 @@ bool PIUSBGPS::checkDevice(IOUSBDevice *theDevice)
 	
 		// Let's see if we have any configurations to play with
 		
-    numConfigs = theDevice->GetNumConfigurations();
+//    numConfigs = theDevice->GetNumConfigurations();
+    numConfigs = theDevice->getDeviceDescriptor()->bNumConfigurations;
     if (numConfigs < 1)
     {
         XTRACE(this, 0, 0, "checkDevice - no configurations");
@@ -436,7 +439,8 @@ bool PIUSBGPS::checkDevice(IOUSBDevice *theDevice)
     {
     	XTRACE(this, 0, cval, "checkDevice - Checking Configuration");
 		
-     	cd = theDevice->GetFullConfigurationDescriptor(cval);
+//        cd = theDevice->GetFullConfigurationDescriptor(cval);
+        cd = theDevice->getConfigurationDescriptor(cval);
      	if (!cd)
     	{
             XTRACE(this, 0, cval, "checkDevice - Error getting the full configuration descriptor");
@@ -496,7 +500,8 @@ bool PIUSBGPS::checkDevice(IOUSBDevice *theDevice)
 bool PIUSBGPS::initDevice(UInt8 numConfigs)
 {
     IOUSBFindInterfaceRequest		req;
-    const IOUSBConfigurationDescriptor	*cd = NULL;		// configuration descriptor
+//    const IOUSBConfigurationDescriptor	*cd = NULL;		// configuration descriptor
+    const StandardUSB::ConfigurationDescriptor	*cd = NULL;		// configuration descriptor
 	const IADDescriptor			*IAD = NULL;
     IOUSBInterfaceDescriptor 		*intf = NULL;		// interface descriptor
     IOReturn				ior = kIOReturnSuccess;
@@ -505,8 +510,9 @@ bool PIUSBGPS::initDevice(UInt8 numConfigs)
 	UInt16				dataClass;
 	bool				configOK = true;				// Assume it's good
 	bool				cdc = false;					// We really only want these
-	const IOUSBConfigurationDescriptor	*suspectConfig = NULL;	// Save a potential configuration
-	
+//	const IOUSBConfigurationDescriptor	*suspectConfig = NULL;	// Save a potential configuration
+    const StandardUSB::ConfigurationDescriptor	*suspectConfig = NULL;		// Save a potential configuration
+    
     XTRACE(this, 0, numConfigs, "initDevice");
 	
 		// Make sure we have a CDC interface to play with
@@ -518,7 +524,8 @@ bool PIUSBGPS::initDevice(UInt8 numConfigs)
 		dataClass = 0;
 		fDataInterfaceNumber = 0xFF;
 		
-     	cd = fpDevice->GetFullConfigurationDescriptor(cval);
+//        cd = fpDevice->GetFullConfigurationDescriptor(cval);
+        cd = fpDevice->getConfigurationDescriptor(cval);
      	if (!cd)
     	{
             XTRACE(this, 0, 0, "initDevice - Error getting the full configuration descriptor");
@@ -741,7 +748,7 @@ IOReturn PIUSBGPS::reInitDevice()
 //
 /****************************************************************************************************/
 
-bool PIUSBGPS::checkACM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool PIUSBGPS::checkACM(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
     bool				gotDescriptors = false;
     bool				configOK = true;
@@ -833,7 +840,7 @@ bool PIUSBGPS::checkACM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 data
 //
 /****************************************************************************************************/
 
-bool PIUSBGPS::checkECM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool PIUSBGPS::checkECM(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
     bool				gotDescriptors = false;
     bool				configOK = true;
@@ -952,7 +959,7 @@ bool PIUSBGPS::checkECM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 data
 //
 /****************************************************************************************************/
 
-bool PIUSBGPS::checkWMC(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool PIUSBGPS::checkWMC(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
        
     XTRACE(this, 0, 0, "checkWMC");
@@ -975,7 +982,7 @@ bool PIUSBGPS::checkWMC(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 data
 //
 /****************************************************************************************************/
 
-bool PIUSBGPS::checkDMM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool PIUSBGPS::checkDMM(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
        
     XTRACE(this, 0, 0, "checkDMM");
@@ -998,7 +1005,7 @@ bool PIUSBGPS::checkDMM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 data
 //
 /****************************************************************************************************/
 
-bool PIUSBGPS::checkMBIM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
+bool PIUSBGPS::checkMBIM(IOUSBHostInterface *Comm, UInt8 cInterfaceNumber, UInt8 dataInterfaceNum)
 {
        
     XTRACE(this, 0, 0, "checkMBIM");
@@ -1027,7 +1034,7 @@ bool PIUSBGPS::checkMBIM(IOUSBInterface *Comm, UInt8 cInterfaceNumber, UInt8 dat
 bool PIUSBGPS::confirmDriver(UInt8 subClass, UInt8 dataInterface)
 {
     IOUSBFindInterfaceRequest	req;
-    IOUSBInterface		*Comm;
+    IOUSBHostInterface		*Comm;
     UInt8			intSubClass;
 	UInt8			controlInterfaceNumber;
     bool			driverOK = false;
@@ -1127,10 +1134,10 @@ bool PIUSBGPS::confirmDriver(UInt8 subClass, UInt8 dataInterface)
 //
 /****************************************************************************************************/
 
-bool PIUSBGPS::confirmControl(UInt8 subClass, IOUSBInterface *CInterface)
+bool PIUSBGPS::confirmControl(UInt8 subClass, IOUSBHostInterface *CInterface)
 {
     IOUSBFindInterfaceRequest	req;
-    IOUSBInterface		*Comm;
+    IOUSBHostInterface		*Comm;
     UInt8			intSubClass;
     bool			driverOK = false;
 

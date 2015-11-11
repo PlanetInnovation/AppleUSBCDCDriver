@@ -36,16 +36,17 @@
 
 #include <IOKit/pwr_mgt/RootDomain.h>
 
-#if !TARGET_OS_IPHONE
-#include <IOKit/usb/IOUSBBus.h>
-#endif /* TARGET_OS_IPHONE */
+//#if !TARGET_OS_IPHONE
+//#include <IOKit/usb/IOUSBBus.h>
+//#endif /* TARGET_OS_IPHONE */
 
-#include <IOKit/usb/IOUSBNub.h>
-#include <IOKit/usb/IOUSBDevice.h>
+//#include <IOKit/usb/IOUSBNub.h>
+#include <IOKit/usb/IOUSBHostDevice.h>
+#include <IOKit/usb/IOUSBHostInterface.h>
+
 #include <IOKit/usb/IOUSBLog.h>
-#include <IOKit/usb/IOUSBPipe.h>
+//#include <IOKit/usb/IOUSBPipe.h>
 #include <IOKit/usb/USB.h>
-#include <IOKit/usb/IOUSBInterface.h>
 
 #include <IOKit/serial/IOSerialKeys.h>
 #include <IOKit/serial/IOSerialDriverSync.h>
@@ -372,7 +373,7 @@ IOService* PIUSBGPSACMControl::probe( IOService *provider, SInt32 *score )
 { 
     IOService   *res;
 	
-		// If our IOUSBInterface has a "do not match" property, it means that we should not match and need 
+		// If our IOUSBHostInterface has a "do not match" property, it means that we should not match and need 
 		// to bail.  See rdar://3716623
     
     OSBoolean *boolObj = OSDynamicCast(OSBoolean, provider->getProperty("kDoNotClassMatchThisInterface"));
@@ -425,7 +426,7 @@ bool PIUSBGPSACMControl::start(IOService *provider)
 
 	// Get my USB provider - the interface
 
-    fControlInterface = OSDynamicCast(IOUSBInterface, provider);
+    fControlInterface = OSDynamicCast(IOUSBHostInterface, provider);
     if(!fControlInterface)
     {
         ALERT(0, 0, "start - provider invalid");
@@ -1147,13 +1148,13 @@ void PIUSBGPSACMControl::releaseResources()
 
 bool PIUSBGPSACMControl::checkInterfaceNumber(PIUSBGPSACMData *dataDriver)
 {
-    IOUSBInterface	*dataInterface;
+    IOUSBHostInterface	*dataInterface;
 
     XTRACEP(this, 0, dataDriver, "checkInterfaceNumber");
     
         // First check we have the same provider (Device)
     
-    dataInterface = OSDynamicCast(IOUSBInterface, dataDriver->getProvider());
+    dataInterface = OSDynamicCast(IOUSBHostInterface, dataDriver->getProvider());
     if (dataInterface == NULL)
     {
         XTRACE(this, 0, 0, "checkInterfaceNumber - Error getting Data provider");

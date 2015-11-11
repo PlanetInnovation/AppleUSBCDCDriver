@@ -39,7 +39,7 @@
 			<key>IOClass</key>
 			<string>PIUSBGPSACMData</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBInterface</string>
+			<string>IOUSBHostInterface</string>
 			<key>IOUserClientClass</key>
 			<string>PIUSBGPSACMDataUserClient</string>
 			<key>OutputBuffers</key>

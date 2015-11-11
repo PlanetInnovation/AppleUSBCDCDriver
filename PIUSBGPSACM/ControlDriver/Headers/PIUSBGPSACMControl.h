@@ -93,7 +93,7 @@ private:
 
 public:
 
-    IOUSBInterface		*fControlInterface;
+    IOUSBHostInterface		*fControlInterface;
     UInt8			fDataInterfaceNumber;			// Matching Data interface number
 
         // IOKit methods:

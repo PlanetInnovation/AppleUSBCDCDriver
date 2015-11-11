@@ -257,7 +257,7 @@ private:
 
 public:
 
-    IOUSBInterface		*fDataInterface;
+    IOUSBHostInterface		*fDataInterface;
     IOWorkLoop			*fWorkLoop;
     IOCommandGate		*fCommandGate;
     PortInfo_t 			fPort;					// Port structure

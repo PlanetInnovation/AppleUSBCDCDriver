@@ -45,7 +45,7 @@
 			<key>IOProbeScore</key>
 			<integer>0</integer>
 			<key>IOProviderClass</key>
-			<string>IOUSBDevice</string>
+			<string>IOUSBHostDevice</string>
 		</dict>
 	</dict>
 	<key>OSBundleLibraries</key>

@@ -37,7 +37,7 @@
 			<key>IOClass</key>
 			<string>PIUSBGPSACMControl</string>
 			<key>IOProviderClass</key>
-			<string>IOUSBInterface</string>
+			<string>IOUSBHostInterface</string>
 		</dict>
 	</dict>
 	<key>OSBundleCompatibleVersion</key>

@@ -41,11 +41,11 @@
 #endif /* TARGET_OS_IPHONE */
 
 #include <IOKit/usb/IOUSBNub.h>
-#include <IOKit/usb/IOUSBDevice.h>
+#include <IOKit/usb/IOUSBHostDevice.h>
 #include <IOKit/usb/IOUSBLog.h>
 #include <IOKit/usb/IOUSBPipe.h>
 #include <IOKit/usb/USB.h>
-#include <IOKit/usb/IOUSBInterface.h>
+#include <IOKit/usb/IOUSBHostInterface.h>
 
 #include <IOKit/serial/IOSerialKeys.h>
 #include <IOKit/serial/IOSerialDriverSync.h>
@@ -1051,7 +1051,7 @@ IOService* PIUSBGPSACMData::probe( IOService *provider, SInt32 *score )
 { 
     IOService   *res;
 	
-		// If our IOUSBInterface has a "do not match" property, it means that we should not match and need 
+		// If our IOUSBHostInterface has a "do not match" property, it means that we should not match and need 
 		// to bail.  See rdar://3716623
     
     OSBoolean *boolObj = OSDynamicCast(OSBoolean, provider->getProperty("kDoNotClassMatchThisInterface"));
@@ -1086,7 +1086,7 @@ bool PIUSBGPSACMData::start(IOService *provider)
 	UInt16		devDriverCount = 0;
     OSNumber	*bufNumber = NULL;
     UInt16		bufValue = 0;
-	IOUSBDevice *usbDevice;
+	IOUSBHostDevice *usbDevice;
 	
 	XTRACE(this, 0, 0, "start");
     
@@ -1115,14 +1115,14 @@ bool PIUSBGPSACMData::start(IOService *provider)
 
 	// Get my USB provider - the interface
 
-    fDataInterface = OSDynamicCast(IOUSBInterface, provider);
+    fDataInterface = OSDynamicCast(IOUSBHostInterface, provider);
     if(!fDataInterface)
     {
         ALERT(0, 0, "start - provider invalid");
         return false;
     }
 
-	usbDevice = OSDynamicCast (IOUSBDevice, fDataInterface->GetDevice());
+	usbDevice = OSDynamicCast (IOUSBHostDevice, fDataInterface->GetDevice());
  	fWanDevice = (OSBoolean *) usbDevice->getProperty("WWAN");	
 	fInterfaceMappings = (OSDictionary *) usbDevice->getProperty("InterfaceMapping");	
 	if (fInterfaceMappings == NULL)
